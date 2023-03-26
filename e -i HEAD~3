@@ -1,0 +1,47 @@
+[33mcommit 56b390e5921a461263ea1a115b14e4b895873ba6[m
+Author: Giovanni Bedoya <giovedoya@gmail.com>
+Date:   Sun Mar 26 16:52:41 2023 +0200
+
+    'upload images and product seed file'
+
+[33mcommit 6d0f62065d0baf52feb5ef4f433aa630847b61d1[m
+Author: Giovanni Bedoya <giovedoya@gmail.com>
+Date:   Sun Mar 26 16:07:16 2023 +0200
+
+    'creation of product models and review'
+
+[33mcommit 3f762097ab221a0adf6dca96a9cf8928d89c759f[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Giovanni Bedoya <giovedoya@gmail.com>
+Date:   Sat Mar 25 12:42:44 2023 +0100
+
+    fly confi
+
+[33mcommit e6d8626e98d9f714cd568c6221808391cc6da543[m
+Author: Ale Bausa <ale.bausa@gmail.com>
+Date:   Sat Mar 25 09:56:49 2023 +0100
+
+    updates appjs
+
+[33mcommit a80a27fd1a84f9afc51f292460aa9ffc5b8b8f94[m
+Author: Ale Bausa <ale.bausa@gmail.com>
+Date:   Tue Mar 21 16:07:44 2023 +0100
+
+    updates routes
+
+[33mcommit d43cc17623302ccf11e825b3cc981305d4dc4391[m
+Author: Ale Bausa <ale.bausa@gmail.com>
+Date:   Thu Mar 16 16:37:05 2023 +0100
+
+    updates template
+
+[33mcommit 0892b6bca4c9b76a776f61260c2a82b3a51598c3[m
+Author: Ale Bausa <ale.bausa@gmail.com>
+Date:   Wed Mar 15 19:34:51 2023 +0100
+
+    deletes utils
+
+[33mcommit 538bba38a175f65306923c3ab3d90ee266312b5d[m
+Author: Ale Bausa <39669342+alebausa@users.noreply.github.com>
+Date:   Wed Mar 15 18:17:53 2023 +0100
+
+    Initial commit
