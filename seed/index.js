@@ -1,13 +1,15 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-// Import the model
+const Product = require('../models/Product');
+const products = require('../db/productSeed');
+const MONGO_URL = 'mongodb+srv://admin:admin@cluster0.oltiq9i.mongodb.net/weddsellDB'; 
 
-// Place the array you want to seed
 
-mongoose.connect(process.env.MONGO_URL)
+
+mongoose.connect(MONGO_URL)
   .then(x => console.log(`Connected to ${x.connection.name}`))
   .then(() => {
-    return // Model.create(array)
+    return Product.create(products)
   })
   .then(() => {
     console.log('Seed done 🌱');
