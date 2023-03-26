@@ -19,7 +19,11 @@ const userSchema = new Schema({
     type: String,
     enum: ['user', 'admin'],
     default: 'user'
-  }
+  },
+  location: {
+    type: String,
+    required: true
+  },
 },
   {
     timestamps: true
