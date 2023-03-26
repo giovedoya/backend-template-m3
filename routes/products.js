@@ -2,8 +2,8 @@ const router = require("express").Router();
 const Product = require('../models/Product')
 
 
-// @desc    Get all shows
-// @route   GET /shows
+// @desc    Get all products
+// @route   GET /products
 // @access  Public
 router.get("/", async (req, res, next) => {
     try {
@@ -15,8 +15,8 @@ router.get("/", async (req, res, next) => {
   });
 
 
-// @desc    Get one show
-// @route   GET /show/:id
+// @desc    Get one product
+// @route   GET /product/:id
 // @access  Public
 router.get('/:productId', async (req, res, next) => {
     const { productId } = req.params;
@@ -29,8 +29,8 @@ router.get('/:productId', async (req, res, next) => {
   });
 
   
-// @desc    Create show
-// @route   POST /shows
+// @desc    Create product
+// @route   POST /product
 // @access  Public
 router.post('/', async (req, res, next) => {
   try {
@@ -41,8 +41,8 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// @desc    Edit one show
-// @route   PUT /shows/:showId
+// @desc    DElete one product
+// @route   DELETE /product/:productId
 // @access  Public
 router.delete('/:productId', async (req, res, next) => {
   const { productId } = req.params;
@@ -54,8 +54,8 @@ router.delete('/:productId', async (req, res, next) => {
   }
 });
 
-// @desc    Delete one show
-// @route   DELETE /shows/:showId
+// @desc    edit one product
+// @route   PUT /product/:productId
 // @access  Public
 router.put('/:productId', async (req, res, next) => {
   const { productId } = req.params;
@@ -67,5 +67,7 @@ router.put('/:productId', async (req, res, next) => {
     next(error)
   }
 });
+
+
 
   module.exports = router;
