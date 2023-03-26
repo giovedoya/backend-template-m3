@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const products = require('../db/productSeed');
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(MONGO_URL)
   .then(x => console.log(`Connected to ${x.connection.name}`))
   .then(() => {
     return Product.create(products)
