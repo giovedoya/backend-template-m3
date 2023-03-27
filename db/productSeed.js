@@ -4,8 +4,7 @@ module.exports = [
     designer: "Maggie Sottero",
     seller: "614c8b3d48e6017a365d1b6c", // ID of the user who created the product
     name: "Maggie Sottero Wedding Dress",
-    description:
-      "Beautiful wedding dress with a princess cut and high quality lace",
+    description: "Beautiful wedding dress with a princess cut and high quality lace",
     price: 1200,
     location: "Mexico City",
     image: "../images/brittney-weng.jpg",
@@ -15,8 +14,7 @@ module.exports = [
     designer: "Badgley Mischka",
     seller: "614c8b3d48e6017a365d1b6c", // ID of the user who created the product
     name: "Badgley Mischka Bridal Shoes",
-    description:
-      "Open-toe bridal shoes with high heels, featuring imitation diamond details",
+    description: "Open-toe bridal shoes with high heels, featuring imitation diamond details",
     price: 300,
     location: "Guadalajara, Jalisco",
     image: "../images/engin-akyurt.jpg",

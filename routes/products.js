@@ -10,7 +10,7 @@ router.get("/", async (req, res, next) => {
       const products = await Product.find();
       res.status(200).json(products);
     } catch (error) {
-  
+      next(error)
     }
   });
 
@@ -21,8 +21,8 @@ router.get("/", async (req, res, next) => {
 router.get('/:productId', async (req, res, next) => {
     const { productId } = req.params;
     try {
-      const products = await Product.findById(productId);
-      res.status(200).json(products);
+      const product = await Product.findById(productId);
+      res.status(200).json(product);
     } catch (error) {
       next(error)
     }
