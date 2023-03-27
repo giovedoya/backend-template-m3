@@ -1,12 +1,12 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Product = require('../models/Product');
-const products = require('../db/productSeed');
+const Review = require('../models/Review');
+const products = require('../db/reviewSeed');
 
 mongoose.connect(process.env.MONGO_URL)
   .then(x => console.log(`Connected to ${x.connection.name}`))
   .then(() => {
-    return Product.create(products)
+    return Review.create(products)
   })
   .then(() => {
     console.log('Seed done 🌱');
