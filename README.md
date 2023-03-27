@@ -91,7 +91,7 @@ Review in the database have the following properties:
 |------------------|-----------|----------------------|---------------------------------|-----------------|
 | SIGN UP user     | POST      | /api/v1/auth/signup  | { username, email, password, location }   |    Public |                 
 | LOG IN user      | POST      | /api/v1/auth/login   | { email, password }             |    Public |                  
-| GET logged in user   | GET     | /api/v1/auth/me    |   | Private |
+| GET logged in user  | GET   | /api/v1/auth/me      |                                 | Private |
 | GET all products   | GET     | /api/v1/products   |   | Public |
 | GET a single product   | GET     | /api/v1/products/:productId   |   | Public |
 | CREATE a new product  | POST     | /api/v1/products   |  { category, designer, seller, name, description, price, location, image } | Private |
