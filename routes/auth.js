@@ -9,7 +9,7 @@ const saltRounds = 10;
 // @route   POST /api/v1/auth/signup
 // @access  Public
 router.post('/signup', async (req, res, next) => {
-  const { email, password, username } = req.body;
+  const { email, password, username, location } = req.body;
   // Check if email or password or name are provided as empty string 
   if (email === "" || password === "" || username === "") {
     res.status(400).json({ message: 'Please fill all the fields to register' });
@@ -21,6 +21,12 @@ router.post('/signup', async (req, res, next) => {
     res.status(400).json({ message: 'Not a valid email format' });
     return;
   }
+  // Validate location field
+  if (!location || location.length < 3) {
+    res.status(400).json({ message: 'Please provide a valid location' });
+    return;
+  }
+
    // Use regex to validate the password format
   const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!passwordRegex.test(password)) {
@@ -35,7 +41,7 @@ router.post('/signup', async (req, res, next) => {
     } else {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
-      const newUser = await User.create({ email, hashedPassword, username });
+      const newUser = await User.create({ email, hashedPassword, username, location });
       res.status(201).json({ data: newUser });
     }
   } catch (error) {
