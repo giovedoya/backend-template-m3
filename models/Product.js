@@ -14,8 +14,7 @@ const productSchema = new Schema(
     },
     seller: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: "User",  
     },
     name: {
       type: String,
