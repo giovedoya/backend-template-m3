@@ -32,7 +32,7 @@ router.get("/:productId", async (req, res, next) => {
 
 // @desc    Create product
 // @route   POST /product
-// @access  Privat
+// @access  Private
 router.post("/", isAuthenticated, async (req, res, next) => {
   const { category, designer, name, description, price, location, image } =
     req.body;
@@ -55,43 +55,26 @@ console.log(seller)
   }
 });
 
-
-
-
 // @desc    DElete one product
 // @route   DELETE /product/:productId
-// @access  Public
-router.delete("/:productId", async (req, res, next) => {
+// @access  Private
+router.delete("/:productId", isAuthenticated, async (req, res, next) => {
   const { productId } = req.params;
+  console.log('producto con ID', productId)
+  const seller = req.payload._id;
   try {
-    const deletedProduct = await Product.findByIdAndDelete(productId);
-    res.status(201).json(deletedProduct);
+    const deletedProduct = await Product.findByIdAndDelete({
+      _id: productId,
+      seller,
+    });
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
 });
-
-// router.delete("/:productId", async (req, res, next) => {
-//   const { productId } = req.params;
-//   const seller = req.user._id;
-//   try {
-//     const deletedProduct = await Product.findOneAndDelete({
-//       _id: productId,
-//       seller,
-//     });
-//     if (!deletedProduct) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-//     const updatedUser = await User.findByIdAndUpdate(
-//       seller,
-//       { $pull: { products: deletedProduct._id } },
-//       { new: true }
-//     );
-//     res.status(204).end();
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
 // @desc    edit one product
 // @route   PUT /product/:productId
@@ -102,7 +85,6 @@ router.put("/:productId", async (req, res, next) => {
     const editedProduct = await Product.findByIdAndUpdate(productId, req.body, {
       new: true,
     });
-    // console.log(editedProduct);
     res.status(204).json(editedProduct);
   } catch (error) {
     next(error);
