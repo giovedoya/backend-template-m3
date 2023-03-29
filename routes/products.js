@@ -55,7 +55,7 @@ console.log(seller)
   }
 });
 
-// @desc    DElete one product
+// @desc    Delete one product
 // @route   DELETE /product/:productId
 // @access  Private
 router.delete("/:productId", isAuthenticated, async (req, res, next) => {
@@ -76,37 +76,25 @@ router.delete("/:productId", isAuthenticated, async (req, res, next) => {
   }
 });
 
-// @desc    edit one product
+// @desc    Edit one product
 // @route   PUT /product/:productId
-// @access  Public
-router.put("/:productId", async (req, res, next) => {
+// @access  Private
+router.put("/:productId", isAuthenticated, async (req, res, next) => {
   const { productId } = req.params;
+  const seller = req.payload._id;
   try {
-    const editedProduct = await Product.findByIdAndUpdate(productId, req.body, {
-      new: true,
-    });
-    res.status(204).json(editedProduct);
+    const editedProduct = await Product.findByIdAndUpdate(
+      { _id: productId, seller },
+      req.body,
+      { new: true }
+    );
+    if (!editedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(editedProduct);
   } catch (error) {
     next(error);
   }
 });
-
-// router.put("/:productId", async (req, res, next) => {
-//   const { productId } = req.params;
-//   const seller = req.user._id;
-//   try {
-//     const editedProduct = await Product.findOneAndUpdate(
-//       { _id: productId, seller },
-//       req.body,
-//       { new: true }
-//     );
-//     if (!editedProduct) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-//     res.status(200).json(editedProduct);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
 module.exports = router;
