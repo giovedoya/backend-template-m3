@@ -8,7 +8,7 @@ const { isAuthenticated, isAdmin } = require('../middlewares/jwt');
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const products = await Product.find().populate("seller", 'username');
+    const products = await Product.find().populate("seller");
     console.log( products);
     res.status(200).json(products);
   } catch (error) {
@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:productId", async (req, res, next) => {
   const { productId } = req.params;
   try {
-    const product = await Product.findById(productId).populate("seller", 'username'); // REMOVE USERNAME
+    const product = await Product.findById(productId).populate("seller"); // REMOVE USERNAME
     res.status(200).json(product);
   } catch (error) {
     next(error);

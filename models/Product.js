@@ -1,50 +1,118 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const productSchema = new Schema( // DRESSSCHEMA
+const dressSchema = new Schema(
   {
-    category: {
+    Neckline: {
       type: String,
-      enum: ["shoe", "dress", "accessory", "veil", "jewelry", "other"],
-      required: true
+      enum: [
+      "Ship",
+      "V-shaped",
+      "Square",
+      "Strapless",
+      "halter",
+      "Round",
+      "Heart",
+      "Delusion",
+      "Fallen shoulders",
+      "Queen anne",
+      "Asymmetric",
+      "Others",
+      ],
     },
-    // ADD SIZE
-    designer: {
+    Court: {
       type: String,
-      required: true
+      enum: [
+        "Princess",
+        "Straight",
+        "evaded",
+        "in A",
+        "Siren",
+        "Empire",
+        "Others",
+      ],
     },
-    seller: {
+    Long: {
+      type: String,
+      enum: ["Long", "Half", "Short"],
+    },
+    Color: {
+      type: String,
+      enum: [
+        "Black",
+        "Light Blue",
+        "Brown",
+        "Golden",
+        "Grey",
+        "Green",
+        "Ivory",
+        "Multicolored",
+        "Pink",
+        "Red",
+        "Silver",
+        "White",
+        "Dark blue",
+        "Others",
+      ],
+    },
+    Size: {
+      type: String,
+      enum: [
+        "32",
+        "34",
+        "36",
+        "38",
+        "40",
+        "42",
+        "44",
+        "46",
+        "48",
+        "50",
+        "52",
+        "54",
+        "56",
+        "58",
+        "60",
+        "62",
+      ],
+    },
+    Designer: {
+      type: String,
+      required: true,
+    },
+    Seller: {
       type: Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
     },
-    name: {
+    Name: {
       type: String,
-      required: true
+      required: true,
     },
-    description: {
+    Description: {
       type: String,
-      required: true
+      required: true,
     },
-    price: { // MIN PRICE
+    Price: {
       type: Number,
-      required: true
+      min: 500,
+      required: true,
     },
-    location: {
+    Location: {
       type: String,
-      required: true
+      required: true,
     },
-    image: {
+    Image: {
       type: String,
-      required: true
+      required: true,
     },
-    sold: {
+    Sold: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-module.exports = model("Product", productSchema);
+module.exports = model("Dress", dressSchema);
