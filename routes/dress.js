@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:dressId", async (req, res, next) => {
   const { dressId } = req.params;
   try {
-    const dress = await Dress.findById(dressId).populate("seller"); // REMOVE USERNAME
+    const dress = await Dress.findById(dressId).populate("seller"); 
     res.status(200).json(dress);
   } catch (error) {
     next(error);
@@ -41,7 +41,7 @@ const seller = req.payload._id;
       neckline, court, long, color, size, designer, name, description, price, location, image, sold,
       seller: seller
     });
-    res.status(201).json(newDress); // POPULATE SELLER
+    res.status(201).json(newDress).populate('seller');
   } catch (error) {
     next(error);
   }
@@ -84,7 +84,7 @@ router.put("/:dressId", isAuthenticated, async (req, res, next) => {
     if (!editedDress) {
       return res.status(404).json({ message: "Dress not found" });
     }
-    res.status(200).json(editedDress); // POPULATE SELLER
+    res.status(200).json(editedDress).populate('seller');
   } catch (error) {
     next(error);
   }
