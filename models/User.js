@@ -6,28 +6,28 @@ const userSchema = new Schema(
     email: {
       type: String,
       unique: true,
-      required: true,
+      required: true
     },
     hashedPassword: {
       type: String,
-      required: true,
+      required: true
     },
     username: {
       type: String,
-      required: true,
+      required: true
     },
     role: {
       type: String,
       enum: ["user", "admin"],
-      default: "user",
+      default: "user"
     },
     location: {
       type: String,
-      required: true,
+      required: true
     },
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

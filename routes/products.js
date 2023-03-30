@@ -9,7 +9,7 @@ const { isAuthenticated, isAdmin } = require('../middlewares/jwt');
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const products = await Product.find().populate("seller", 'username email');
+    const products = await Product.find().populate("seller", 'username');
     console.log( products);
     res.status(200).json(products);
   } catch (error) {
@@ -23,7 +23,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:productId", async (req, res, next) => {
   const { productId } = req.params;
   try {
-    const product = await Product.findById(productId).populate("seller", 'username email');
+    const product = await Product.findById(productId).populate("seller", 'username');
     res.status(200).json(product);
   } catch (error) {
     next(error);
@@ -37,7 +37,6 @@ router.post("/", isAuthenticated, async (req, res, next) => {
   const { category, designer, name, description, price, location, image } =
     req.body;
 const seller = req.payload._id;
-console.log(seller)
   try {
     const newProduct = await Product.create({
       category,
@@ -60,7 +59,6 @@ console.log(seller)
 // @access  Private
 router.delete("/:productId", isAuthenticated, async (req, res, next) => {
   const { productId } = req.params;
-  console.log('producto con ID', productId)
   const seller = req.payload._id;
   try {
     const deletedProduct = await Product.findByIdAndDelete({
@@ -94,6 +92,20 @@ router.put("/:productId", isAuthenticated, async (req, res, next) => {
     res.status(200).json(editedProduct);
   } catch (error) {
     next(error);
+  }
+});
+
+
+router.post('/:productId/reviews', isAuthenticated, async (req, res, next) => {
+  console.log('encontrada')
+  const { productId } = req.params;
+  const { rating, comment } = req.body;
+  const buyerId = req.payload._id;  
+    try {
+    const newReview = await Review.create({ productId, rating, comment, buyerId });
+    res.status(201).json(newReview);
+  } catch (error) {
+    next(error)
   }
 });
 

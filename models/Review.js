@@ -5,25 +5,25 @@ const reviewSchema = new mongoose.Schema(
   {
     buyerId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: "User"
     },
     productId: {
       type: Schema.Types.ObjectId,
-      ref: "Product",
-      required: true,
+      ref: "Product"
     },
     rating: {
       type: Number,
       required: true,
+      min: 0,
+      max: 5
     },
     comment: {
       type: String,
-      required: true,
+      required: true
     },
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

@@ -1,14 +1,15 @@
 const router = require("express").Router();
-const Review = require('../models/Review');
-const User = require('../models/User');
+const Review = require("../models/Review");
+const Product = require("../models/Product")
+const jwt = require("jsonwebtoken");
+const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 
 // @desc    Get all reviews
 // @route   GET /reviews
 // @access  Public
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const reviews = await Review.find()
-      .populate('buyerId', 'username');
+    const reviews = await Review.find().populate("buyerId", "username");
     res.status(200).json(reviews);
   } catch (error) {
     next(error);
@@ -18,30 +19,44 @@ router.get('/', async (req, res, next) => {
 // @desc    Get one review
 // @route   GET /reviews/:id
 // @access  Public
-router.get('/:reviewId', async (req, res, next) => {
-    const { reviewId } = req.params;
-    try {
-      const review = await Review.findById(reviewId).populate('buyerId', 'username');
-      res.status(200).json(review);
-    } catch (error) {
-      next(error)
-    }
-  });
-
+router.get("/:reviewId", async (req, res, next) => {
+  const { reviewId } = req.params;
+  try {
+    const review = await Review.findById(reviewId).populate(
+      "buyerId",
+      "username"
+    );
+    console.log(review);
+    res.status(200).json(review);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // @desc    Create review for a product
-// @route   POST /products/:productId/reviews
+// @route   POST /reviews/:productId
 // @access  Private
-router.post('/:productId/reviews', async (req, res, next) => {
+router.post("/:productId", isAuthenticated, async (req, res, next) => {
+
   const { productId } = req.params;
-  const { rating, comment } = req.body;
-  const buyerId = req.user._id; // req.payload._id
+
+  const buyerId  = req.payload._id;
+console.log('ESTE ES EL USUARIO CON ... ID', buyerId)
+  const { rating, comment } = req.body;  
+  console.log('que pasa aquí', rating )
   try {
-    const newReview = await Review.create({ buyerId, productId, rating, comment });
-    const updatedProduct = await Product.findByIdAndUpdate(productId, { $push: { reviews: newReview._id } }, { new: true });
+    const newReview = await Review.create({
+      productId: productId,
+      rating,
+      comment,
+      buyerId: buyerId,
+    });
+    console.log('que es esto', newReview)
+    // await Product.findByIdAndUpdate(productId, {$inc: {reviewsCount: 1} });
     res.status(201).json(newReview);
   } catch (error) {
-    next(error)
+    next(error);
+    console.error(error)
   }
 });
 
@@ -50,45 +65,50 @@ router.post('/:productId/reviews', async (req, res, next) => {
 // @desc    Edit a review for a product
 // @route   PUT /products/:productId/reviews/:reviewId
 // @access  Private
-router.put('/:productId/reviews/:reviewId', async (req, res, next) => {
-  const { productId, reviewId } = req.params;
-  const { rating, comment } = req.body;
-  const buyerId = req.user._id;
+router.put(
+  "/:productId/reviews/:reviewId", isAuthenticated, async (req, res, next) => {
+    console.log("ruta encontrada");
+    const { productId, reviewId } = req.params;
+    const { rating, comment } = req.body;
+    const buyerId = req.payload._id;
 
-  try {
-    const updatedReview = await Review.findOneAndUpdate(
-      { _id: reviewId, buyerId, productId },
-      { rating, comment },
-      { new: true }
-    );
-    if (!updatedReview) {
-      return res.status(404).json({ message: "Review not found" });
+    try {
+      const updatedReview = await Review.findOneAndUpdate(
+        { _id: reviewId, buyerId, productId },
+        { rating, comment },
+        { new: true }
+      );
+      if (!updatedReview) {
+        return res.status(404).json({ message: "Review not found" });
+      }
+      res.status(200).json(updatedReview);
+    } catch (error) {
+      next(error);
     }
-    res.status(200).json(updatedReview);
-  } catch (error) {
-    next(error);
   }
-});
-
+);
 
 // @desc    Delete a review
 // @route   DELETE /reviews/:reviewId
 // @access  Private
-router.delete('/:reviewId', async (req, res, next) => {
+router.delete("/:reviewId", isAuthenticated, async (req, res, next) => {
+  console.log('encontrada')
   const { reviewId } = req.params;
-  const userId = req.user._id;
+  const buyerId = req.payload._id;
   try {
-    const deletedReview = await Review.findOneAndDelete({ _id: reviewId, buyerId: userId });
-    if (!deletedReview) {
-      return res.status(404).json({ message: "Review not found" });
+    const review = await Review.findOne({ _id: reviewId, buyerId });
+    if (!review) {
+      return res.status(404).json({ message: "Review not found or you are not authorized to delete it" });
     }
+    const deletedReview = await Review.findOneAndDelete({
+      _id: reviewId,
+      buyerId,
+    });
     res.status(204).end();
   } catch (error) {
-    next(error)
+    next(error);
+    console.error(error)
   }
 });
-
-
-
 
 module.exports = router;

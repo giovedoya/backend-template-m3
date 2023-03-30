@@ -6,43 +6,43 @@ const productSchema = new Schema(
     category: {
       type: String,
       enum: ["shoe", "dress", "accessory", "veil", "jewelry", "other"],
-      required: true,
+      required: true
     },
     designer: {
       type: String,
-      required: true,
+      required: true
     },
     seller: {
       type: Schema.Types.ObjectId,
-      ref: "User",  
+      ref: "User"
     },
     name: {
       type: String,
-      required: true,
+      required: true
     },
     description: {
       type: String,
-      required: true,
+      required: true
     },
     price: {
       type: Number,
-      required: true,
+      required: true
     },
     location: {
       type: String,
-      required: true,
+      required: true
     },
     image: {
       type: String,
-      required: true,
+      required: true
     },
     sold: {
       type: Boolean,
-      default: false,
+      default: false
     },
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
