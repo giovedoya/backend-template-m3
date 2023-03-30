@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const productSchema = new Schema(
+const productSchema = new Schema( // DRESSSCHEMA
   {
     category: {
       type: String,
       enum: ["shoe", "dress", "accessory", "veil", "jewelry", "other"],
       required: true
     },
+    // ADD SIZE
     designer: {
       type: String,
       required: true
@@ -24,7 +25,7 @@ const productSchema = new Schema(
       type: String,
       required: true
     },
-    price: {
+    price: { // MIN PRICE
       type: Number,
       required: true
     },

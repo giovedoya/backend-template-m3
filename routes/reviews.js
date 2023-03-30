@@ -9,7 +9,7 @@ const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const reviews = await Review.find().populate("buyerId", "username");
+    const reviews = await Review.find().populate("buyerId", "username");// POPULATE BUYERID AND PRODUCTID
     res.status(200).json(reviews);
   } catch (error) {
     next(error);
@@ -24,7 +24,7 @@ router.get("/:reviewId", async (req, res, next) => {
   try {
     const review = await Review.findById(reviewId).populate(
       "buyerId",
-      "username"
+      "username" // PRODUCT ID
     );
     console.log(review);
     res.status(200).json(review);
@@ -39,7 +39,8 @@ router.get("/:reviewId", async (req, res, next) => {
 router.post("/:productId", isAuthenticated, async (req, res, next) => {
   const { productId } = req.params;
   const buyerId = req.payload._id;
-  const { rating, comment } = req.body;
+  const { rating, comment } = req.body; // CHECK THAT i HAVE RATING AND COMMENT
+  // CHECK THAT 
   try {
     const newReview = await Review.create({
       productId: productId,
@@ -47,7 +48,7 @@ router.post("/:productId", isAuthenticated, async (req, res, next) => {
       comment,
       buyerId: buyerId,
     });
-     res.status(201).json(newReview);
+     res.status(201).json(newReview); // POPULATE BUYERID AND PRODUCTID
   } catch (error) {
     next(error);
     console.error(error);
@@ -83,10 +84,11 @@ router.put("/:reviewId", isAuthenticated, async (req, res, next) => {
 router.delete("/:reviewId", isAuthenticated, async (req, res, next) => {
   const { reviewId } = req.params;
   const buyerId = req.payload._id;
+  // CHECK THAT USER IS OWNER
   try {
-    const deletedReview = await Review.findOneAndDelete({
+    const deletedReview = await Review.findOneAndDelete({ // FINDBYIDANDDELETE
       _id: reviewId, 
-      buyerId,
+      buyerId, // DELETE
     });    
     if (!deletedReview) {
       return res
@@ -95,10 +97,10 @@ router.delete("/:reviewId", isAuthenticated, async (req, res, next) => {
           message: "Review not found or you are not authorized to delete it",
         });
     }   
-    res.status(204).end();
+    res.status(204).end(); // JSON MESSAGE
   } catch (error) {
     next(error);
-    console.error(error);
+    console.error(error); // REMOVE
   }
 });
 

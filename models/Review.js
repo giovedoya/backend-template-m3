@@ -3,11 +3,11 @@ const { Schema, model } = mongoose;
 
 const reviewSchema = new mongoose.Schema(
   {
-    buyerId: {
+    buyerId: { // REQUIRED
       type: Schema.Types.ObjectId,
       ref: "User"
     },
-    productId: {
+    productId: {// REQUIRED
       type: Schema.Types.ObjectId,
       ref: "Product"
     },

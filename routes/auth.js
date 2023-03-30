@@ -22,7 +22,7 @@ router.post('/signup', async (req, res, next) => {
     return;
   }
   // Validate location field
-  if (!location || location.length < 3) {
+  if (!location || typeof location !== 'string'){ 
     res.status(400).json({ message: 'Please provide a valid location' });
     return;
   }
@@ -71,10 +71,11 @@ router.post('/login', async (req, res, next) => {
       const passwordMatches = bcrypt.compareSync(password, userInDB.hashedPassword);
       if (passwordMatches) {
         // Let's create what we want to store in the jwt token
-        const payload = {
+        const payload = { 
           email: userInDB.email,
           username: userInDB.username,
           role: userInDB.role,
+          location: userInDB.location,
           _id: userInDB._id
         }
         // Use the jwt middleware to create de token
