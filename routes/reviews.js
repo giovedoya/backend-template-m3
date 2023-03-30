@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const Review = require("../models/Review");
-const Product = require("../models/Product");
 const jwt = require("jsonwebtoken");
 const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 

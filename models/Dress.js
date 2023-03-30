@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const dressSchema = new Schema(
   {
-    Neckline: {
+    neckline: {
       type: String,
       enum: [
       "Ship",
@@ -20,7 +20,7 @@ const dressSchema = new Schema(
       "Others",
       ],
     },
-    Court: {
+    court: {
       type: String,
       enum: [
         "Princess",
@@ -32,11 +32,11 @@ const dressSchema = new Schema(
         "Others",
       ],
     },
-    Long: {
+    long: {
       type: String,
       enum: ["Long", "Half", "Short"],
     },
-    Color: {
+    color: {
       type: String,
       enum: [
         "Black",
@@ -55,7 +55,7 @@ const dressSchema = new Schema(
         "Others",
       ],
     },
-    Size: {
+    size: {
       type: String,
       enum: [
         "32",
@@ -76,36 +76,36 @@ const dressSchema = new Schema(
         "62",
       ],
     },
-    Designer: {
+    designer: {
       type: String,
       required: true,
     },
-    Seller: {
+    seller: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    Name: {
+    name: {
       type: String,
       required: true,
     },
-    Description: {
+    description: {
       type: String,
       required: true,
     },
-    Price: {
+    price: {
       type: Number,
       min: 500,
       required: true,
     },
-    Location: {
+    location: {
       type: String,
       required: true,
     },
-    Image: {
+    image: {
       type: String,
       required: true,
     },
-    Sold: {
+    sold: {
       type: Boolean,
       default: false,
     },
