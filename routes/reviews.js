@@ -57,16 +57,14 @@ router.post("/:productId", isAuthenticated, async (req, res, next) => {
 // @desc    Edit a review for a product
 // @route   PUT /reviews/:reviewId
 // @access  Private
-router.put(  "/:reviewId", isAuthenticated, async (req, res, next) => {
-    console.log("ruta encontrada");
-    const { productId, reviewId } = req.params;
-    const { rating, comment } = req.body;
+router.put("/:reviewId", isAuthenticated, async (req, res, next) => {
+    const { reviewId } = req.params;
     const buyerId = req.payload._id;
 
     try {
-      const updatedReview = await Review.findOneAndUpdate(
-        { _id: reviewId, buyerId, productId },
-        { rating, comment },
+      const updatedReview = await Review.findByIdAndUpdate(
+        { _id: reviewId, buyerId },
+        req.body,
         { new: true }
       );
       if (!updatedReview) {
