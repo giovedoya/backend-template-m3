@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Review = require("../models/Review");
-const Product = require("../models/Product")
+const Product = require("../models/Product");
 const jwt = require("jsonwebtoken");
 const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
 
@@ -37,13 +37,9 @@ router.get("/:reviewId", async (req, res, next) => {
 // @route   POST /reviews/:productId
 // @access  Private
 router.post("/:productId", isAuthenticated, async (req, res, next) => {
-
   const { productId } = req.params;
-
-  const buyerId  = req.payload._id;
-console.log('ESTE ES EL USUARIO CON ... ID', buyerId)
-  const { rating, comment } = req.body;  
-  console.log('que pasa aquí', rating )
+  const buyerId = req.payload._id;
+  const { rating, comment } = req.body;
   try {
     const newReview = await Review.create({
       productId: productId,
@@ -51,22 +47,17 @@ console.log('ESTE ES EL USUARIO CON ... ID', buyerId)
       comment,
       buyerId: buyerId,
     });
-    console.log('que es esto', newReview)
-    // await Product.findByIdAndUpdate(productId, {$inc: {reviewsCount: 1} });
-    res.status(201).json(newReview);
+     res.status(201).json(newReview);
   } catch (error) {
     next(error);
-    console.error(error)
+    console.error(error);
   }
 });
 
-
-
 // @desc    Edit a review for a product
-// @route   PUT /products/:productId/reviews/:reviewId
+// @route   PUT /reviews/:reviewId
 // @access  Private
-router.put(
-  "/:productId/reviews/:reviewId", isAuthenticated, async (req, res, next) => {
+router.put(  "/:reviewId", isAuthenticated, async (req, res, next) => {
     console.log("ruta encontrada");
     const { productId, reviewId } = req.params;
     const { rating, comment } = req.body;
@@ -92,22 +83,24 @@ router.put(
 // @route   DELETE /reviews/:reviewId
 // @access  Private
 router.delete("/:reviewId", isAuthenticated, async (req, res, next) => {
-  console.log('encontrada')
   const { reviewId } = req.params;
   const buyerId = req.payload._id;
   try {
-    const review = await Review.findOne({ _id: reviewId, buyerId });
-    if (!review) {
-      return res.status(404).json({ message: "Review not found or you are not authorized to delete it" });
-    }
     const deletedReview = await Review.findOneAndDelete({
-      _id: reviewId,
+      _id: reviewId, 
       buyerId,
-    });
+    });    
+    if (!deletedReview) {
+      return res
+        .status(404)
+        .json({
+          message: "Review not found or you are not authorized to delete it",
+        });
+    }   
     res.status(204).end();
   } catch (error) {
     next(error);
-    console.error(error)
+    console.error(error);
   }
 });
 
