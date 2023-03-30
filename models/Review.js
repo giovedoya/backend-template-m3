@@ -8,9 +8,9 @@ const reviewSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
-    productId: {
+    dressId: {
       type: Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "Dress",
       required: true
     },
     rating: {

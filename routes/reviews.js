@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Review = require("../models/Review");
-const jwt = require("jsonwebtoken");
-const { isAuthenticated, isAdmin } = require("../middlewares/jwt");
+const { isAuthenticated } = require("../middlewares/jwt");
 
 // @desc    Get all reviews
 // @route   GET /reviews
@@ -35,14 +34,14 @@ router.get("/:reviewId", async (req, res, next) => {
 // @desc    Create review for a product
 // @route   POST /reviews/:productId
 // @access  Private
-router.post("/:productId", isAuthenticated, async (req, res, next) => {
-  const { productId } = req.params;
+router.post("/:dressId", isAuthenticated, async (req, res, next) => {
+  const { dressId } = req.params;
   const buyerId = req.payload._id;
   const { rating, comment } = req.body; // CHECK THAT i HAVE RATING AND COMMENT
   // CHECK THAT 
   try {
     const newReview = await Review.create({
-      productId: productId,
+      dressId: dressId,
       rating,
       comment,
       buyerId: buyerId,
@@ -50,7 +49,6 @@ router.post("/:productId", isAuthenticated, async (req, res, next) => {
      res.status(201).json(newReview); // POPULATE BUYERID AND PRODUCTID
   } catch (error) {
     next(error);
-    console.error(error);
   }
 });
 
@@ -99,7 +97,6 @@ router.delete("/:reviewId", isAuthenticated, async (req, res, next) => {
     res.status(204).end(); // JSON MESSAGE
   } catch (error) {
     next(error);
-    console.error(error); // REMOVE
   }
 });
 
