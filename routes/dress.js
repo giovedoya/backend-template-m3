@@ -34,23 +34,27 @@ router.post("/", isAuthenticated, async (req, res, next) => {
   const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } =
     req.body;
     // CHECK THAT CATEGORY IS WITHIN THE ENUM. IF IT'S NOT, SET CATEGORY TO OTHER
-    if (!["Ship", "V-shaped", "Square", "Strapless", "halter", "Round", "Heart", "Delusion", "Fallen shoulders", "Queen anne", "Asymmetric", "Others"].includes(neckline)) {
+    const allowedProps = ["neckline", "court", "long", "color", "seller", "size", "designer", "name", "description", "price", "location", "image", "sold"];
+    for (let prop in req.body) {
+      if (!allowedProps.includes(prop)) {
+        return res.status(400).json({ message: `Invalid property: ${prop}` });
+      }
+    }
+    if (!["ship", "v-shaped", "square", "strapless", "halter", "round", "heart", "delusion", "fallen shoulders", "queen anne", "asymmetric", "others"].includes(neckline)) {
       return res.status(400).json({ message: "Invalid neckline value" });
 }
-    if (!["Princess", "Straight", "Evaded", "in A", "Siren", "Empire", "Others"].includes(court)) {
+    
+    if (!["princess", "straight", "evaded", "in A", "siren", "empire", "others"].includes(court)) {
       return res.status(400).json({ message: "Invalid court value" });
 }
-    if (!["Long", "Half", "Short",].includes(long)) {
+    if (!["long", "half", "short",].includes(long)) {
       return res.status(400).json({ message: "Invalid long value" });
 }
-    if (!["Black", "Light Blue", "Brown", "Golden", "Grey", "Green", "Ivory", "Multicolored", "Pink", "Red", "Silver", "White", "Dark blue", "Others"].includes(color)) {
+    if (!["black", "light blue", "brown", "golden", "grey", "green", "ivory", "multicolored", "pink", "red", "silver", "white", "dark blue", "others"].includes(color)) {
       return res.status(400).json({ message: "Invalid color value" });
 }
     if (!["32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "60", "62"].includes(size)) {
       return res.status(400).json({ message: "Invalid size value" });
-}
-if (!["neckline", "court", "long", "color", "size", "designer", "name", "description", "price", "location", "image", "sold"].includes(size)) {
-  return res.status(400).json({ message: "Invalid category value" });
 }
     // CHECK THAT ALL BODY FIELDS EXPECTED ARE PRESENT. 
 const seller = req.payload._id;
@@ -60,10 +64,10 @@ const seller = req.payload._id;
       seller: seller
     });
     console.log(newDress)
-    res.status(201).json(newDress).populate('seller');
-   
+    res.status(201).json(newDress).populate('seller');   
   } catch (error) {
     next(error);
+    console.error(error)
   }
 });
 
