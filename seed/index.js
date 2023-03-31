@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Dress = require('../models/Dress');
-const dress = require('../db/productSeed');
+const dress = require('../db/dressSeed');
 
 mongoose.connect(process.env.MONGO_URL)
   .then(x => console.log(`Connected to ${x.connection.name}`))

@@ -57,6 +57,7 @@ const seller = req.payload._id;
 router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
   const { dressId } = req.params;
   const seller = req.payload._id;
+  console.log(seller)
   
   try {
     const deletedDress = await Dress.findById(dressId);

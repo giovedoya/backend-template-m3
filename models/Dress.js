@@ -10,7 +10,7 @@ const dressSchema = new Schema(
       "V-shaped",
       "Square",
       "Strapless",
-      "halter",
+      "Halter",
       "Round",
       "Heart",
       "Delusion",
