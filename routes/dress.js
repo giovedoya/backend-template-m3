@@ -34,6 +34,10 @@ router.post("/", isAuthenticated, async (req, res, next) => {
   const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } =
     req.body;
     // CHECK THAT CATEGORY IS WITHIN THE ENUM. IF IT'S NOT, SET CATEGORY TO OTHER
+    if (!["Ship", "V-shaped", "Square", "Strapless", "halter", "Round", "Heart", "Delusion", "Fallen shoulders", "Queen anne", "Asymmetric", "Others"].includes(neckline)) {
+      neckline = "Others";
+    }
+    
     // CHECK THAT ALL BODY FIELDS EXPECTED ARE PRESENT. 
 const seller = req.payload._id;
   try {
@@ -53,21 +57,52 @@ const seller = req.payload._id;
 router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
   const { dressId } = req.params;
   const seller = req.payload._id;
-  // CHECK THAT EVERY ROUTE THAT DELETES OR EDITS SOMETHING, THE USER IN SESSION IS THE OWNER OF THE THING TO DELETE/EDIT
-  // IF IT'S NOT THE OWNER, ERROR
+  
   try {
-    const deletedDress = await Dress.findByIdAndDelete({
-      _id: dressId,
-      seller, // REMOVE SELLER
-    });
+    const deletedDress = await Dress.findById(dressId);
+    
     if (!deletedDress) {
       return res.status(404).json({ message: "Dress not found" });
     }
+
+    if (deletedDress.seller.toString() !== seller) {
+      return res.status(403).json({ message: "You are not allowed to delete this dress" });
+    }
+    
+    await Dress.findByIdAndDelete(dressId);
+    
     res.status(204).end();
   } catch (error) {
     next(error);
   }
 });
+
+
+
+
+
+// router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
+//   const { dressId } = req.params;
+//   const seller = req.payload._id;
+//   // CHECK THAT EVERY ROUTE THAT DELETES OR EDITS SOMETHING, THE USER IN SESSION IS THE OWNER OF THE THING TO DELETE/EDIT
+//   // IF IT'S NOT THE OWNER, ERROR
+//   try {
+//     const deletedDress = await Dress.findByIdAndDelete({
+//       _id: dressId,
+//       seller, // REMOVE SELLER
+//     });
+//     if (!deletedDress) {
+//       return res.status(404).json({ message: "Dress not found" });
+//     }
+//     res.status(204).end();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+
+
+
 
 // @desc    Edit one product
 // @route   PUT /product/:productId

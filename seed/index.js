@@ -1,12 +1,12 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Product = require('../models/Dress');
-const products = require('../db/productSeed');
+const Dress = require('../models/Dress');
+const dress = require('../db/productSeed');
 
 mongoose.connect(process.env.MONGO_URL)
   .then(x => console.log(`Connected to ${x.connection.name}`))
   .then(() => {
-    return Product.create(products)
+    return Dress.create(dress)
   })
   .then(() => {
     console.log('Seed done 🌱');
