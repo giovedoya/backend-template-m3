@@ -6,7 +6,8 @@
     "seed": "node ./seed",
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
-    "seedReview": "node ./seed/reviewSeed"
+    "seedReview": "node ./seed/reviewSeed",
+    "seedPost": "node ./seed/postSeed"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
