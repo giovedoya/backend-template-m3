@@ -46,8 +46,11 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     if (!["Black", "Light Blue", "Brown", "Golden", "Grey", "Green", "Ivory", "Multicolored", "Pink", "Red", "Silver", "White", "Dark blue", "Others"].includes(color)) {
       return res.status(400).json({ message: "Invalid color value" });
 }
-    if (!["32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "60", "62",].includes(size)) {
+    if (!["32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "60", "62"].includes(size)) {
       return res.status(400).json({ message: "Invalid size value" });
+}
+if (!["neckline", "court", "long", "color", "size", "designer", "name", "description", "price", "location", "image", "sold"].includes(size)) {
+  return res.status(400).json({ message: "Invalid category value" });
 }
     // CHECK THAT ALL BODY FIELDS EXPECTED ARE PRESENT. 
 const seller = req.payload._id;
