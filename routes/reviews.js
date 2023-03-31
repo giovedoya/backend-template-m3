@@ -7,7 +7,7 @@ const { isAuthenticated } = require("../middlewares/jwt");
 // @access  Public
 router.get("/", async (req, res, next) => {
   try {
-    const reviews = await Review.find().populate("buyerId", "username");// POPULATE BUYERID AND PRODUCTID
+    const reviews = await Review.find().populate("buyerId", "dressId");
     res.status(200).json(reviews);
   } catch (error) {
     next(error);
@@ -15,30 +15,31 @@ router.get("/", async (req, res, next) => {
 });
 
 // @desc    Get one review
-// @route   GET /reviews/:id
+// @route   GET /reviews/:reviewId
 // @access  Public
 router.get("/:reviewId", async (req, res, next) => {
   const { reviewId } = req.params;
   try {
     const review = await Review.findById(reviewId).populate(
       "buyerId",
-      "username" // PRODUCT ID
+      "dressId"
     );
-    console.log(review);
     res.status(200).json(review);
   } catch (error) {
     next(error);
   }
 });
 
-// @desc    Create review for a product
-// @route   POST /reviews/:productId
+// @desc    Create review for a dress
+// @route   POST /reviews/:dressId
 // @access  Private
 router.post("/:dressId", isAuthenticated, async (req, res, next) => {
   const { dressId } = req.params;
   const buyerId = req.payload._id;
-  const { rating, comment } = req.body; // CHECK THAT i HAVE RATING AND COMMENT
-  // CHECK THAT 
+  const { rating, comment } = req.body;
+  if (!rating || !comment) {
+    return res.status(400).json({ message: "Please provide a rating and comment" });
+  }
   try {
     const newReview = await Review.create({
       dressId: dressId,
@@ -46,19 +47,22 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
       comment,
       buyerId: buyerId,
     });
-     res.status(201).json(newReview); // POPULATE BUYERID AND PRODUCTID
+     res.status(201).json(newReview).populate("buyerId").populate("dressId");
   } catch (error) {
     next(error);
   }
 });
 
-// @desc    Edit a review for a product
+// @desc    Edit a review for a dress
 // @route   PUT /reviews/:reviewId
 // @access  Private
 router.put("/:reviewId", isAuthenticated, async (req, res, next) => {
     const { reviewId } = req.params;
     const buyerId = req.payload._id;
-
+    const { rating, comment, } = req.body;
+    if (!rating || !comment) {
+      return res.status(400).json({ message: "Please provide a rating and comment" });
+    }
     try {
       const updatedReview = await Review.findByIdAndUpdate(
         { _id: reviewId, buyerId },
@@ -81,20 +85,13 @@ router.put("/:reviewId", isAuthenticated, async (req, res, next) => {
 router.delete("/:reviewId", isAuthenticated, async (req, res, next) => {
   const { reviewId } = req.params;
   const buyerId = req.payload._id;
-  // CHECK THAT USER IS OWNER
   try {
-    const deletedReview = await Review.findOneAndDelete({ // FINDBYIDANDDELETE
-      _id: reviewId, 
-      buyerId, // DELETE
-    });    
-    if (!deletedReview) {
-      return res
-        .status(404)
-        .json({
-          message: "Review not found or you are not authorized to delete it",
-        });
-    }   
-    res.status(204).end(); // JSON MESSAGE
+    const deletedReview = await Review.findById(reviewId);
+    if (deletedReview.buyerId.toString() !== buyerId) {
+      return res.status(404).json({ message: "You are not authorized to delete it"});
+    }
+    await Review.findByIdAndDelete(reviewId);   
+    res.status(204).json({ message: "the review has been removed successfully" });
   } catch (error) {
     next(error);
   }

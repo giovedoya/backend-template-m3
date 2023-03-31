@@ -78,21 +78,19 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
       return res.status(403).json({ message: "You are not allowed to delete this dress" });
     }
     await Dress.findByIdAndDelete(dressId);
-    res.status(204).json({ message: "You are not allowed to delete this dress" });
+    res.status(204).json({ message: "the dress has been removed successfully" });
   } catch (error) {
     next(error);
   }
 });
 
 
-// @desc    Edit one product
+// @desc    Edit one dress
 // @route   PUT /dress/:dressId
 // @access  Private
 router.put("/:dressId", isAuthenticated, async (req, res, next) => {
   const { dressId } = req.params;
   const seller = req.payload._id;
-
-  // CHECK THAT ALL BODY FIELDS EXPECTED ARE PRESENT.
   const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
   if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image ) {
     res.status(400).json({ message: 'Please fill all the fields to edit' });
@@ -112,7 +110,5 @@ router.put("/:dressId", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
-
-
 
 module.exports = router;
