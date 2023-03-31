@@ -35,9 +35,20 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     req.body;
     // CHECK THAT CATEGORY IS WITHIN THE ENUM. IF IT'S NOT, SET CATEGORY TO OTHER
     if (!["Ship", "V-shaped", "Square", "Strapless", "halter", "Round", "Heart", "Delusion", "Fallen shoulders", "Queen anne", "Asymmetric", "Others"].includes(neckline)) {
-      neckline = "Others";
-    }
-    
+      return res.status(400).json({ message: "Invalid neckline value" });
+}
+    if (!["Princess", "Straight", "Evaded", "in A", "Siren", "Empire", "Others"].includes(court)) {
+      return res.status(400).json({ message: "Invalid court value" });
+}
+    if (!["Long", "Half", "Short",].includes(long)) {
+      return res.status(400).json({ message: "Invalid long value" });
+}
+    if (!["Black", "Light Blue", "Brown", "Golden", "Grey", "Green", "Ivory", "Multicolored", "Pink", "Red", "Silver", "White", "Dark blue", "Others"].includes(color)) {
+      return res.status(400).json({ message: "Invalid color value" });
+}
+    if (!["32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "60", "62",].includes(size)) {
+      return res.status(400).json({ message: "Invalid size value" });
+}
     // CHECK THAT ALL BODY FIELDS EXPECTED ARE PRESENT. 
 const seller = req.payload._id;
   try {
@@ -45,7 +56,9 @@ const seller = req.payload._id;
       neckline, court, long, color, size, designer, name, description, price, location, image, sold,
       seller: seller
     });
+    console.log(newDress)
     res.status(201).json(newDress).populate('seller');
+   
   } catch (error) {
     next(error);
   }
