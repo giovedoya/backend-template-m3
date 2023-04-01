@@ -17,10 +17,10 @@ router.get("/", async (req, res, next) => {
 // @desc    Get one post
 // @route   GET /post/:posId
 // @access  Public
-router.get("/:posId", async (req, res, next) => {
-  const { posId } = req.params;
+router.get("/:postId", async (req, res, next) => {
+  const { postId } = req.params;
   try {
-    const post = await BlogPost.findById(posId)
+    const post = await BlogPost.findById(postId)
     res.status(200).json(post);
   } catch (error) {
     next(error);
@@ -31,7 +31,6 @@ router.get("/:posId", async (req, res, next) => {
 // @route   POST /post
 // @access  Private
 router.post('/', async (req, res, next) => {
-    console.log('ruta encontrada')
     const { title, content, author, image, createdAt } = req.body
         try {
           const newPost = await BlogPost.create({ title, content, author, image, createdAt });
@@ -42,19 +41,18 @@ router.post('/', async (req, res, next) => {
         }
       });
 
-// @desc    Edit a review for a dress
-// @route   PUT /reviews/:reviewId
+// @desc    Edit a post 
+// @route   PUT /post/:posId
 // @access  Private
-router.put("/:posId",  async (req, res, next) => {
-    console.log('ruta encontrada')
-    const { posId } = req.params;
+router.put("/:postId",  async (req, res, next) => {
+    const { postId } = req.params;
   
     // const { rating, comment, } = req.body;
     // if (!rating || !comment) {
     //   return res.status(400).json({ message: "Please provide a rating and comment" });
     // }
     try {
-      const updatedPost = await BlogPost.findByIdAndUpdate(posId, req.body, { new: true })
+      const updatedPost = await BlogPost.findByIdAndUpdate(postId, req.body, { new: true })
       if (!updatedPost) {
         return res.status(404).json({ message: "Posst not found" });
       };
@@ -65,22 +63,21 @@ router.put("/:posId",  async (req, res, next) => {
   }
 );
 
-// @desc    Delete a review
-// @route   DELETE /reviews/:reviewId
+// @desc    Delete a post
+// @route   DELETE /post/:posId
 // @access  Private
-// router.delete("/:reviewId", isAdmin, async (req, res, next) => {
-//   const { reviewId } = req.params;
-//   const buyerId = req.payload._id;
-//   try {
-//     const deletedReview = await Review.findById(reviewId);
-//     if (deletedReview.buyerId.toString() !== buyerId) {
-//       return res.status(404).json({ message: "You are not authorized to delete it"});
-//     }
-//     await Review.findByIdAndDelete(reviewId);   
-//     res.status(204).json({ message: "the review has been removed successfully" });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.delete("/:postId", async (req, res, next) => {
+  const { postId } = req.params;
+  try {
+     await BlogPost.findById(postId);
+    // if (deletedReview.buyerId.toString() !== buyerId) {
+    //   return res.status(404).json({ message: "You are not authorized to delete it"});
+    // }
+    await BlogPost.findByIdAndDelete(postId);   
+    res.status(204).json({ message: "the post has been removed successfully" });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
