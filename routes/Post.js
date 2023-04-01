@@ -30,14 +30,20 @@ router.get("/:postId", async (req, res, next) => {
 // @desc    Create post
 // @route   POST /post
 // @access  Private
-router.post('/', async (req, res, next) => {
+router.post('/',  async (req, res, next) => {
+    // const admin = req.payload;
     const { title, content, author, image, createdAt } = req.body
+    // if (!req.payload.isAdmin) {
+    //     return res.status(401).json({ message: "Unauthorized" });
+    //   }
+    if (!title || !content || !author || !image || !createdAt) {
+        return res.status(400).json({ message: "please fill in all the fields" });
+      }
         try {
           const newPost = await BlogPost.create({ title, content, author, image, createdAt });
           res.status(201).json(newPost);
         } catch (error) {
           next(error)
-          console.error(error)
         }
       });
 
