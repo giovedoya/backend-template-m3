@@ -28,27 +28,19 @@ router.get("/:posId", async (req, res, next) => {
 });
 
 // @desc    Create post
-// @route   POST /reviews/:dressId
+// @route   POST /post
 // @access  Private
-router.post("/:dressId", isAdmin, async (req, res, next) => {
-  const { dressId } = req.params;
-  const buyerId = req.payload._id;
-  const { rating, comment } = req.body;
-  if (!rating || !comment) {
-    return res.status(400).json({ message: "Please provide a rating and comment" });
-  }
-  try {
-    const newReview = await Review.create({
-      dressId: dressId,
-      rating,
-      comment,
-      buyerId: buyerId,
-    });
-     res.status(201).json(newReview).populate("buyerId").populate("dressId");
-  } catch (error) {
-    next(error);
-  }
-});
+router.post('/', async (req, res, next) => {
+    console.log('ruta encontrada')
+    const { title, content, author, image, createdAt } = req.body
+        try {
+          const newPost = await BlogPost.create({ title, content, author, image, createdAt });
+          res.status(201).json(newPost);
+        } catch (error) {
+          next(error)
+          console.error(error)
+        }
+      });
 
 // @desc    Edit a review for a dress
 // @route   PUT /reviews/:reviewId
@@ -79,19 +71,19 @@ router.put("/:reviewId", isAdmin, async (req, res, next) => {
 // @desc    Delete a review
 // @route   DELETE /reviews/:reviewId
 // @access  Private
-router.delete("/:reviewId", isAdmin, async (req, res, next) => {
-  const { reviewId } = req.params;
-  const buyerId = req.payload._id;
-  try {
-    const deletedReview = await Review.findById(reviewId);
-    if (deletedReview.buyerId.toString() !== buyerId) {
-      return res.status(404).json({ message: "You are not authorized to delete it"});
-    }
-    await Review.findByIdAndDelete(reviewId);   
-    res.status(204).json({ message: "the review has been removed successfully" });
-  } catch (error) {
-    next(error);
-  }
-});
+// router.delete("/:reviewId", isAdmin, async (req, res, next) => {
+//   const { reviewId } = req.params;
+//   const buyerId = req.payload._id;
+//   try {
+//     const deletedReview = await Review.findById(reviewId);
+//     if (deletedReview.buyerId.toString() !== buyerId) {
+//       return res.status(404).json({ message: "You are not authorized to delete it"});
+//     }
+//     await Review.findByIdAndDelete(reviewId);   
+//     res.status(204).json({ message: "the review has been removed successfully" });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 module.exports = router;
