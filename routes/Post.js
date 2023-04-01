@@ -52,15 +52,14 @@ router.post('/',  async (req, res, next) => {
 // @access  Private
 router.put("/:postId",  async (req, res, next) => {
     const { postId } = req.params;
-  
-    // const { rating, comment, } = req.body;
-    // if (!rating || !comment) {
-    //   return res.status(400).json({ message: "Please provide a rating and comment" });
-    // }
+    const { title, content, author, image, createdAt } = req.body
+    if (!title || !content || !author || !image || !createdAt) {
+        return res.status(400).json({ message: "please fill in all the fields" });
+      }
     try {
-      const updatedPost = await BlogPost.findByIdAndUpdate(postId, req.body, { new: true })
+      const updatedPost = await BlogPost.findByIdAndUpdate(postId, { title, content, author, image, createdAt }, { new: true })
       if (!updatedPost) {
-        return res.status(404).json({ message: "Posst not found" });
+        return res.status(404).json({ message: "Post not found" });
       };
       res.status(200).json(updatedPost);
     } catch (error) {
