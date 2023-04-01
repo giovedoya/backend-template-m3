@@ -45,23 +45,20 @@ router.post('/', async (req, res, next) => {
 // @desc    Edit a review for a dress
 // @route   PUT /reviews/:reviewId
 // @access  Private
-router.put("/:reviewId", isAdmin, async (req, res, next) => {
-    const { reviewId } = req.params;
-    const buyerId = req.payload._id;
-    const { rating, comment, } = req.body;
-    if (!rating || !comment) {
-      return res.status(400).json({ message: "Please provide a rating and comment" });
-    }
+router.put("/:posId",  async (req, res, next) => {
+    console.log('ruta encontrada')
+    const { posId } = req.params;
+  
+    // const { rating, comment, } = req.body;
+    // if (!rating || !comment) {
+    //   return res.status(400).json({ message: "Please provide a rating and comment" });
+    // }
     try {
-      const updatedReview = await Review.findByIdAndUpdate(
-        { _id: reviewId, buyerId },
-        req.body,
-        { new: true }
-      );
-      if (!updatedReview) {
-        return res.status(404).json({ message: "Review not found" });
-      }
-      res.status(200).json(updatedReview);
+      const updatedPost = await BlogPost.findByIdAndUpdate(posId, req.body, { new: true })
+      if (!updatedPost) {
+        return res.status(404).json({ message: "Posst not found" });
+      };
+      res.status(200).json(updatedPost);
     } catch (error) {
       next(error);
     }
