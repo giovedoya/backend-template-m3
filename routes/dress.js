@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Dress = require("../models/Dress");
 const { isAuthenticated } = require('../middlewares/jwt');
+const validateDress = require("../utils");
 
 // @desc    Get all dress
 // @route   GET /dress
@@ -31,40 +32,44 @@ router.get("/:dressId", async (req, res, next) => {
 // @route   POST /dress
 // @access  Private
 router.post("/", isAuthenticated, async (req, res, next) => {
-  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } =
-    req.body;
-    const allowedProps = ["neckline", "court", "long", "color", "seller", "size", "designer", "name", "description", "price", "location", "image", "sold"];
-    for (let prop in req.body) {
-      if (!allowedProps.includes(prop)) {
-        return res.status(400).json({ message: `Invalid property: ${prop}` });
+  // utils function to validate that all fields in req.body have the proper value
+  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } = req.body;
+
+  const dressIsValid = validateDress(req.body);
+console.log(dressIsValid)
+  if (dressIsValid === false){
+    res.status(400).json({message: "Please check your fields"});
+  } else{
+    const seller = req.payload._id;
+    
+      try {
+        const newDress = await Dress.create({
+          neckline, court, long, color, size, designer, name, description, price, location, image, sold,
+          seller: seller
+        });
+        res.status(201).json(newDress).populate('seller');
+      } catch (error) {
+        next(error);
       }
-    }
-    if (!["ship", "v-shaped", "square", "strapless", "halter", "round", "heart", "delusion", "fallen shoulders", "queen anne", "asymmetric", "others"].includes(neckline)) {
-      return res.status(400).json({ message: "Invalid neckline value" });
-}
-    if (!["princess", "straight", "evaded", "in A", "siren", "empire", "others"].includes(court)) {
-      return res.status(400).json({ message: "Invalid court value" });
-}
-    if (!["long", "half", "short",].includes(long)) {
-      return res.status(400).json({ message: "Invalid long value" });
-}
-    if (!["black", "light blue", "brown", "golden", "grey", "green", "ivory", "multicolored", "pink", "red", "silver", "white", "dark blue", "others"].includes(color)) {
-      return res.status(400).json({ message: "Invalid color value" });
-}
-    if (!["32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "60", "62"].includes(size)) {
-      return res.status(400).json({ message: "Invalid size value" });
-}
-const seller = req.payload._id;
-  try {
-    const newDress = await Dress.create({
-      neckline, court, long, color, size, designer, name, description, price, location, image, sold,
-      seller: seller
-    });
-    res.status(201).json(newDress).populate('seller');
-  } catch (error) {
-    next(error);
   }
 });
+
+
+// @desc    Get search dress
+// @route   GET /dress/search
+// @access  Public
+router.get("/search", async (req, res, next) => {
+  console.log('ruta encontrada')
+  try {
+    const { neckline, court, size, long } = req.query;
+    const dresses = await Dress.find({ neckline, court, size, long }).populate("seller");
+    res.status(200).json(dresses);
+  } catch (error) {
+    next(error);
+    console.error(error)
+  }
+});
+
 
 // @desc    Delete one dress
 // @route   DELETE /dress/:dressId
@@ -89,19 +94,24 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
 // @route   PUT /dress/:dressId
 // @access  Private
 router.put("/:dressId", isAuthenticated, async (req, res, next) => {
+
   const { dressId } = req.params;
+  
   const seller = req.payload._id;
-  const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
-  if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image ) {
-    res.status(400).json({ message: 'Please fill all the fields to edit' });
-    return;
-  }
+  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } = req.body;
+
+  const dressIsValid = validateDress(req.body);
+ 
+  if (dressIsValid === false){
+    res.status(400).json({message: "Please check your fields"});
+  } else{
   try {
     const editedDress = await Dress.findByIdAndUpdate(
       { _id: dressId, seller }, 
-      { neckline, court, long, color, size, designer, name, description, price, location, image },
+      { neckline, court, long, color, size, designer, name, description, price, location, image, sold },
       { new: true }
     );
+    console.log(' sadsdasddds', editedDress)
     if (!editedDress) {
       return res.status(404).json({ message: "Dress not found" });
     }
@@ -109,6 +119,7 @@ router.put("/:dressId", isAuthenticated, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+}
 });
 
 module.exports = router;

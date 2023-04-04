@@ -2,6 +2,7 @@ const router = require("express").Router();
 const BlogPost = require('../models/BlogPost');
 const { isAdmin } = require("../middlewares/jwt");
 
+const { isAuthenticated } = require('../middlewares/jwt');
 // @desc    Get all post
 // @route   GET /post
 // @access  Public
@@ -30,7 +31,7 @@ router.get("/:postId", async (req, res, next) => {
 // @desc    Create post
 // @route   POST /post
 // @access  Private
-router.post('/',  async (req, res, next) => {
+router.post('/', isAuthenticated, isAdmin, async (req, res, next) => {
     // const admin = req.payload;
     const { title, content, author, image, createdAt } = req.body
     // if (!req.payload.isAdmin) {
@@ -75,9 +76,6 @@ router.delete("/:postId", async (req, res, next) => {
   const { postId } = req.params;
   try {
      await BlogPost.findById(postId);
-    // if (deletedReview.buyerId.toString() !== buyerId) {
-    //   return res.status(404).json({ message: "You are not authorized to delete it"});
-    // }
     await BlogPost.findByIdAndDelete(postId);   
     res.status(204).json({ message: "the post has been removed successfully" });
   } catch (error) {
