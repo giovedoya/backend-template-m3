@@ -18,7 +18,7 @@ const dressSchema = new Schema(
       "queen anne",
       "asymmetric",
       "others",
-      ],
+      ]
     },
     court: {
       type: String,
@@ -30,11 +30,11 @@ const dressSchema = new Schema(
         "siren",
         "empire",
         "others",
-      ],
+      ]
     },
     long: {
       type: String,
-      enum: ["long", "half", "short"],
+      enum: ["long", "half", "short"]
     },
     color: {
       type: String,
@@ -53,7 +53,7 @@ const dressSchema = new Schema(
         "white",
         "dark blue",
         "others",
-      ],
+      ]
     },
     size: {
       type: Number,
@@ -74,29 +74,29 @@ const dressSchema = new Schema(
         58,
         60,
         62,
-      ],
+      ]
     },
     
     designer: {
       type: String,
-      required: true,
+      required: true
     },
     seller: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "User"
     },
     name: {
       type: String,
-      required: true,
+      required: true
     },
     description: {
       type: String,
-      required: true,
+      required: true
     },
     price: {
       type: Number,
       min: 500,
-      required: true,
+      required: true
     },
     location: {
       type: String,
@@ -109,11 +109,16 @@ const dressSchema = new Schema(
     },
     sold: {
       type: Boolean,
-      default: false,
+      default: false
     },
+    type: {
+      type: String,
+      enum: ['yes', 'no'],
+      default: 'no'
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

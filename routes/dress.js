@@ -33,7 +33,7 @@ router.get("/:dressId", async (req, res, next) => {
 // @access  Private
 router.post("/", isAuthenticated, async (req, res, next) => {
   // utils function to validate that all fields in req.body have the proper value
-  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } = req.body;
+  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type } = req.body;
 
   const dressIsValid = validateDress(req.body);
 console.log(dressIsValid)
@@ -44,7 +44,7 @@ console.log(dressIsValid)
     
       try {
         const newDress = await Dress.create({
-          neckline, court, long, color, size, designer, name, description, price, location, image, sold,
+          neckline, court, long, color, size, designer, name, description, price, location, image, sold, type,
           seller: seller
         });
         res.status(201).json(newDress).populate('seller');
@@ -94,21 +94,21 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
 // @route   PUT /dress/:dressId
 // @access  Private
 router.put("/:dressId", isAuthenticated, async (req, res, next) => {
-
+// console.log("hemos lleegao")
   const { dressId } = req.params;
   
   const seller = req.payload._id;
-  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold } = req.body;
-
+  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type } = req.body;
+  
   const dressIsValid = validateDress(req.body);
- 
+  // console.log(dressIsValid, req.body)
   if (dressIsValid === false){
     res.status(400).json({message: "Please check your fields"});
   } else{
   try {
     const editedDress = await Dress.findByIdAndUpdate(
       { _id: dressId, seller }, 
-      { neckline, court, long, color, size, designer, name, description, price, location, image, sold },
+      { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type },
       { new: true }
     );
     console.log(' sadsdasddds', editedDress)
