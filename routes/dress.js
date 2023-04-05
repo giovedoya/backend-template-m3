@@ -33,7 +33,6 @@ router.get("/:dressId", async (req, res, next) => {
 // @route   GET /dress/search
 // @access  Public
 router.get("/search", async (req, res, next) => {
-  console.log('ruta encontrada')
   try {
     const { neckline, court, size, long } = req.query;
     const dresses = await Dress.find({ neckline, court, size, long }).populate("seller");
@@ -48,30 +47,24 @@ router.get("/search", async (req, res, next) => {
 // @desc    Create dress
 // @route   POST /dress
 // @access  Private
-router.post("/", isAuthenticated, async (req, res, next) => {
-  // utils function to validate that all fields in req.body have the proper value
-  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type } = req.body;
-
-  const dressIsValid = validateDress(req.body);
-console.log(dressIsValid)
-  if (dressIsValid === false){
+router.post("/", isAuthenticated, async (req, res, next) => {  
+  const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
+  const dressIsValid = validateDress(req.body);   // utils function to validate that all fields in req.body have the proper value
+  if (dressIsValid.isValid === false){
     res.status(400).json({message: "Please check your fields"});
   } else{
     const seller = req.payload._id;
-    
       try {
         const newDress = await Dress.create({
-          neckline, court, long, color, size, designer, name, description, price, location, image, sold, type,
+          neckline, court, long, color, size, designer, name, description, price, location, image,
           seller: seller
-        });
-        res.status(201).json(newDress).populate('seller');
+        }).populate('seller');
+        res.status(201).json(newDress)
       } catch (error) {
         next(error);
       }
   }
 });
-
-
 
 
 // @desc    Delete one dress
@@ -96,10 +89,8 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
 // @desc    Edit one dress
 // @route   PUT /dress/:dressId
 // @access  Private
-
   router.put("/:dressId", isAuthenticated, async (req, res, next) => {
-    const { dressId } = req.params;
-    
+    const { dressId } = req.params;    
     const seller = req.payload._id;
     const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
     
@@ -119,15 +110,10 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
       }
       res.status(200).json(editedDress)
     } catch (error) {
-      console.error("Error in updating dress:", error);
       res.status(500).json({ message: "Internal server error" });
       next(error);
     }
   }
 });
-
-
-
-
 
 module.exports = router;
