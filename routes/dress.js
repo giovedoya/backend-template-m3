@@ -96,20 +96,21 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
 // @desc    Edit one dress
 // @route   PUT /dress/:dressId
 // @access  Private
-router.put("/:dressId", isAuthenticated, async (req, res, next) => {
-  const { dressId } = req.params;
-  
-  const seller = req.payload._id;
-  const { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type } = req.body;
-  
-  const dressIsValid = validateDress(req.body);
-  if (dressIsValid === false){
-    res.status(400).json({message: "Please check your fields"});
-  } else{
+
+  router.put("/:dressId", isAuthenticated, async (req, res, next) => {
+    const { dressId } = req.params;
+    
+    const seller = req.payload._id;
+    const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
+    
+    const validation = validateDress(req.body);
+    if (!validation.isValid) {
+      res.status(400).json({ message: "Please check your fields", missingFields: validation.missingFields });
+    } else {
     try {
       const editedDress = await Dress.findOneAndUpdate(
         { _id: dressId, seller },
-        { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type },
+        { neckline, court, long, color, size, designer, name, description, price, location, image },
         { new: true }
       ).populate('seller');
 

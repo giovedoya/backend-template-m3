@@ -1,7 +1,25 @@
 const validateDress = (body) =>{
-    const { neckline, court, long, color, size, designer, name, description, price, location, image, type} =
+    const { neckline, court, long, color, size, designer, name, description, price, location, image} =
     body;
-    if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image || !type){
+
+    const missingFields = [];
+  
+    if (!neckline) missingFields.push("neckline");
+    if (!court) missingFields.push("court");
+    if (!long) missingFields.push("long");
+    if (!color) missingFields.push("color");
+    if (!size) missingFields.push("size");
+    if (!name) missingFields.push("name");
+    if (!description) missingFields.push("description");
+    if (!price) missingFields.push("price");
+    if (!location) missingFields.push("location");
+    if (!image) missingFields.push("image");
+    
+    if (missingFields.length > 0) {
+      return { isValid: false, missingFields };
+    }
+
+    if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image ){
         return false;
     }
     const allowedProps = ["neckline", "court", "long", "color", "size", "designer", "name", "description", "price", "location", "image", "sold", "type"];
@@ -30,7 +48,7 @@ if (![32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62].includes(s
   
   return false;
 }
-  return true;
+return { isValid: true };
   }
 
   module.exports = validateDress;
