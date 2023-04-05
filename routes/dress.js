@@ -28,6 +28,23 @@ router.get("/:dressId", async (req, res, next) => {
   }
 });
 
+
+// @desc    Get search dress
+// @route   GET /dress/search
+// @access  Public
+router.get("/search", async (req, res, next) => {
+  console.log('ruta encontrada')
+  try {
+    const { neckline, court, size, long } = req.query;
+    const dresses = await Dress.find({ neckline, court, size, long }).populate("seller");
+    res.status(200).json(dresses);
+  } catch (error) {
+    next(error);
+    console.error(error)
+  }
+});
+
+
 // @desc    Create dress
 // @route   POST /dress
 // @access  Private
@@ -55,20 +72,6 @@ console.log(dressIsValid)
 });
 
 
-// @desc    Get search dress
-// @route   GET /dress/search
-// @access  Public
-router.get("/search", async (req, res, next) => {
-  console.log('ruta encontrada')
-  try {
-    const { neckline, court, size, long } = req.query;
-    const dresses = await Dress.find({ neckline, court, size, long }).populate("seller");
-    res.status(200).json(dresses);
-  } catch (error) {
-    next(error);
-    console.error(error)
-  }
-});
 
 
 // @desc    Delete one dress
@@ -94,32 +97,36 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
 // @route   PUT /dress/:dressId
 // @access  Private
 router.put("/:dressId", isAuthenticated, async (req, res, next) => {
-// console.log("hemos lleegao")
   const { dressId } = req.params;
   
   const seller = req.payload._id;
   const { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type } = req.body;
   
   const dressIsValid = validateDress(req.body);
-  // console.log(dressIsValid, req.body)
   if (dressIsValid === false){
     res.status(400).json({message: "Please check your fields"});
   } else{
-  try {
-    const editedDress = await Dress.findByIdAndUpdate(
-      { _id: dressId, seller }, 
-      { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type },
-      { new: true }
-    );
-    console.log(' sadsdasddds', editedDress)
-    if (!editedDress) {
-      return res.status(404).json({ message: "Dress not found" });
+    try {
+      const editedDress = await Dress.findOneAndUpdate(
+        { _id: dressId, seller },
+        { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type },
+        { new: true }
+      ).populate('seller');
+
+      if (!editedDress) {
+        return res.status(404).json({ message: "Dress not found" });
+      }
+      res.status(200).json(editedDress)
+    } catch (error) {
+      console.error("Error in updating dress:", error);
+      res.status(500).json({ message: "Internal server error" });
+      next(error);
     }
-    res.status(200).json(editedDress).populate('seller');
-  } catch (error) {
-    next(error);
   }
-}
 });
+
+
+
+
 
 module.exports = router;

@@ -1,10 +1,10 @@
 const validateDress = (body) =>{
-    const { neckline, court, long, color, size, designer, name, description, price, location, image, sold, type} =
+    const { neckline, court, long, color, size, designer, name, description, price, location, image, type} =
     body;
-    if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image || !sold || !type){
+    if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image || !type){
         return false;
     }
-    const allowedProps = ["neckline", "court", "long", "color", "size", "designer", "seller", "name", "description", "price", "location", "image", "sold", "type"];
+    const allowedProps = ["neckline", "court", "long", "color", "size", "designer", "name", "description", "price", "location", "image", "sold", "type"];
     for (let prop in body) {
       if (!allowedProps.includes(prop)) {
         return false;
