@@ -32,16 +32,12 @@ router.get("/:postId", async (req, res, next) => {
 // @route   POST /post
 // @access  Private
 router.post('/', isAuthenticated, isAdmin, async (req, res, next) => {
-    // const admin = req.payload;
-    const { title, content, author, image, createdAt } = req.body
-    // if (!req.payload.isAdmin) {
-    //     return res.status(401).json({ message: "Unauthorized" });
-    //   }
-    if (!title || !content || !author || !image || !createdAt) {
+    const { title, content, author, image } = req.body
+    if (!title || !content || !author || !image ) {
         return res.status(400).json({ message: "please fill in all the fields" });
       }
         try {
-          const newPost = await BlogPost.create({ title, content, author, image, createdAt });
+          const newPost = await BlogPost.create({ title, content, author, image });
           res.status(201).json(newPost);
         } catch (error) {
           next(error)
@@ -53,12 +49,12 @@ router.post('/', isAuthenticated, isAdmin, async (req, res, next) => {
 // @access  Private
 router.put("/:postId",  async (req, res, next) => {
     const { postId } = req.params;
-    const { title, content, author, image, createdAt } = req.body
-    if (!title || !content || !author || !image || !createdAt) {
+    const { title, content, author, image } = req.body
+    if (!title || !content || !author || !image ) {
         return res.status(400).json({ message: "please fill in all the fields" });
       }
     try {
-      const updatedPost = await BlogPost.findByIdAndUpdate(postId, { title, content, author, image, createdAt }, { new: true })
+      const updatedPost = await BlogPost.findByIdAndUpdate(postId, { title, content, author, image }, { new: true })
       if (!updatedPost) {
         return res.status(404).json({ message: "Post not found" });
       };

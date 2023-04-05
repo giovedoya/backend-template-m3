@@ -20,10 +20,6 @@ const blogPostSchema = new Schema({
     default:
       "https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg"
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
 });
 
 module.exports = model("BlogPost", blogPostSchema);

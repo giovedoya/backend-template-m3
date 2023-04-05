@@ -20,6 +20,9 @@ const validateDress = (body) =>{
       return { isValid: false, missingFields };
     }
 
+    // if (!neckline || !court || !long || !color || !size || !designer || !name || !description || !price || !location || !image ){
+    //     return false;
+    // }
     const allowedProps = ["neckline", "court", "long", "color", "size", "designer", "name", "description", "price", "location", "image"];
     for (let prop in body) {
       if (!allowedProps.includes(prop)) {
@@ -30,15 +33,19 @@ const validateDress = (body) =>{
       return false;
   }
     if (!["princess", "straight", "evaded", "in A", "siren", "empire", "others"].includes(court)) {
+      console.log("Invalid court:", court);
       return false;
   }
     if (!["long", "half", "short",].includes(long)) {
+      console.log("Invalid court:", long);
       return false;
   }
   if (!["black", "light blue", "brown", "golden", "grey", "green", "ivory", "multicolored", "pink", "red", "silver", "white", "dark blue", "others"].includes(color)) {
+    console.log("Invalid court:", color);
     return false;
 }
 if (![32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62].includes(Number(size))) {
+  console.log("Invalid court:", size);
   return false;
 }
 return { isValid: true };
