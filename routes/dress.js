@@ -4,6 +4,7 @@ const { isAuthenticated } = require('../middlewares/jwt');
 const validateDress = require("../utils");
 const fileUploader = require("../config/cloudinary.config");
 
+
 // @desc    Get all dress
 // @route   GET /dress
 // @access  Public
@@ -64,18 +65,13 @@ router.post("/upload", isAuthenticated, fileUploader.single("imageUrl"), (req, r
 // @route   POST /dress
 // @access  Private
 router.post("/", isAuthenticated, async (req, res, next) => {
-  
-  // utils function to validate that all fields in req.body have the proper value
   const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
-  // console.log("Datos recibidos en el servidor:", req.body);
   const dressIsValid = validateDress(req.body);
   console.log(dressIsValid);
-  // console.log("Resultado de la validación:", dressIsValid);
   if (dressIsValid.isValid === false){
     res.status(400).json({message: "Please check your fields"});
   } else{
     const seller = req.payload._id;
-    
       try {
         const newDress = await Dress.create({
           neckline, court, long, color, size, designer, name, description, price, location, image,
@@ -116,8 +112,9 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
 
   router.put("/:dressId", isAuthenticated, async (req, res, next) => {
     const { dressId } = req.params;
-    
+
     const seller = req.payload._id;
+
     const { neckline, court, long, color, size, designer, name, description, price, location, image } = req.body;
     
     const validation = validateDress(req.body);
@@ -142,9 +139,5 @@ router.delete("/:dressId", isAuthenticated, async (req, res, next) => {
     }
   }
 });
-
-
-
-
 
 module.exports = router;
