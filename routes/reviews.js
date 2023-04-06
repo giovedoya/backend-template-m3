@@ -47,7 +47,10 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
       comment,
       buyerId: buyerId,
     });
-     res.status(201).json(newReview).populate("buyerId").populate("dressId");
+
+    const populatedReview = await newReview.populate("buyerId").populate("dressId").execPopulate();
+
+    res.status(201).json(populatedReview);
   } catch (error) {
     next(error);
   }
