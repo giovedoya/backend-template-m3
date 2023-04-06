@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Dress = require("../models/Dress");
 const { isAuthenticated } = require('../middlewares/jwt');
 const validateDress = require("../utils");
+const fileUploader = require("../config/cloudinary.config");
 
 // @desc    Get all dress
 // @route   GET /dress
@@ -42,6 +43,20 @@ router.get("/search", async (req, res, next) => {
     next(error);
     console.error(error)
   }
+});
+
+
+
+
+// @desc    Upload image
+// @route   POST /upload
+// @access  Private
+router.post("/upload", isAuthenticated, fileUploader.single("imageUrl"), (req, res, next) => {
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  res.json({ fileUrl: req.file.path });
 });
 
 
