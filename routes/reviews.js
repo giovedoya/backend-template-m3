@@ -37,6 +37,7 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
   const { dressId } = req.params;
   const buyerId = req.payload._id;
   const { rating, comment } = req.body;
+  
   if (!rating || !comment) {
     return res.status(400).json({ message: "Please provide a rating and comment" });
   }
@@ -46,11 +47,9 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
       rating,
       comment,
       buyerId: buyerId,
-    });
-
-    const populatedReview = await newReview.populate("buyerId").populate("dressId").execPopulate();
-
-    res.status(201).json(populatedReview);
+    })
+    console.log('esta es la nueva review:', newReview)
+    res.status(201).json(newReview);
   } catch (error) {
     next(error);
   }
@@ -60,6 +59,7 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
 // @route   PUT /reviews/:reviewId
 // @access  Private
 router.put("/:reviewId", isAuthenticated, async (req, res, next) => {
+  console.log('encontreada')
     const { reviewId } = req.params;
     const buyerId = req.payload._id;
     const { rating, comment, } = req.body;

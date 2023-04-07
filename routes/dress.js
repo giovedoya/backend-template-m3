@@ -33,27 +33,32 @@ router.get("/:dressId", async (req, res, next) => {
 // @route   GET /dress/search
 // @access  Public
 router.get("/search", async (req, res, next) => {
-  console.log("ruta encontrada");
-  try {
-    const { neckline, court, size, long } = req.query;
-    const dresses = await Dress.find({ neckline, court, size, long }).populate(
-      "seller"
-    );
-    res.status(200).json(dresses);
+  console.log('ruta')
+  const { size, court, neckline, long } = req.query;
+
+  try {  
+    if (!size && !court && !neckline && !long) { // asegurarse de que al menos un parámetro de búsqueda se haya proporcionado
+      return res.status(400).json({ message: "Por favor, proporcione al menos un parámetro de búsqueda" });
+    }
+    const dress = await Dress.find({
+      size: new RegExp(size, 'i'),
+      court: new RegExp(court, 'i'),
+      neckline: new RegExp(neckline, 'i'),
+      long: new RegExp(long, 'i')
+    }).populate("seller");
+    res.status(200).json(dress)
   } catch (error) {
     next(error);
     console.error(error);
   }
 });
 
+
+
 // @desc    Upload image
 // @route   POST /upload
 // @access  Private
-router.post(
-  "/upload",
-  isAuthenticated,
-  fileUploader.single("imageUrl"),
-  (req, res, next) => {
+router.post("/upload", isAuthenticated,fileUploader.single("imageUrl"), (req, res, next) => {
     if (!req.file) {
       next(new Error("No file uploaded!"));
       return;
