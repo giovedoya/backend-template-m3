@@ -37,7 +37,6 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
   const { dressId } = req.params;
   const buyerId = req.payload._id;
   const { rating, comment } = req.body;
-  
   if (!rating || !comment) {
     return res.status(400).json({ message: "Please provide a rating and comment" });
   }
@@ -48,7 +47,6 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
       comment,
       buyerId: buyerId,
     })
-    console.log('esta es la nueva review:', newReview)
     res.status(201).json(newReview);
   } catch (error) {
     next(error);

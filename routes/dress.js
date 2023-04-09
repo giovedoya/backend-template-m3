@@ -16,6 +16,39 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+
+// @desc    Get search dress
+// @route   GET /dress/search
+// @access  Public
+router.get("/search", async (req, res, next) => {
+  console.log('ruta', req.query)
+  const { size,court,neckline,long,location } = req.body;
+  const new_body = {}
+  for (const [key, value] of Object.entries(req.body)) {
+    if(value!==undefined){
+      new_body[key]=value
+    }
+  }
+  console.log(req.body)
+  try {  
+    if (!req.body 
+      // && !court && !neckline && !long && !location
+      ) { 
+      return res.status(400).json({ message: "Please provide at least one search parameter" });
+    }
+    const dress = await Dress.find(new_body)
+    console.log(dress)
+    if (dress.length === 0) {
+      return res.status(404).json({ message: "No dresses found" });
+    }
+    res.status(200).json(dress)
+  } catch (error) {
+    next(error);
+    console.error(error);
+  }
+});
+
+
 // @desc    Get one dress
 // @route   GET /dress/:dressId
 // @access  Public
@@ -28,32 +61,6 @@ router.get("/:dressId", async (req, res, next) => {
     next(error);
   }
 });
-
-// @desc    Get search dress
-// @route   GET /dress/search
-// @access  Public
-router.get("/search", async (req, res, next) => {
-  console.log('ruta')
-  const { size, court, neckline, long } = req.query;
-
-  try {  
-    if (!size && !court && !neckline && !long) { // asegurarse de que al menos un parámetro de búsqueda se haya proporcionado
-      return res.status(400).json({ message: "Por favor, proporcione al menos un parámetro de búsqueda" });
-    }
-    const dress = await Dress.find({
-      size: new RegExp(size, 'i'),
-      court: new RegExp(court, 'i'),
-      neckline: new RegExp(neckline, 'i'),
-      long: new RegExp(long, 'i')
-    }).populate("seller");
-    res.status(200).json(dress)
-  } catch (error) {
-    next(error);
-    console.error(error);
-  }
-});
-
-
 
 // @desc    Upload image
 // @route   POST /upload
