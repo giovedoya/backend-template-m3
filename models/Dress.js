@@ -103,9 +103,10 @@ const dressSchema = new Schema(
       required: true,
     },
     image: {
-      type: String,
-      // required: true,
-      default: 'https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg'
+      images: {
+        type: [String],
+        required: true
+      }
     },
     sold: {
       type: Boolean,

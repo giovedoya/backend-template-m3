@@ -3,6 +3,11 @@ const Dress = require("../models/Dress");
 const { isAuthenticated } = require("../middlewares/jwt");
 const validateDress = require("../utils");
 const fileUploader = require("../config/cloudinary.config");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+const upload = require("../config/cloudinary.config");
+const showUploadWidget = require('../utils/addmultipleimg')
+
 
 // @desc    Get all dress
 // @route   GET /dress
@@ -21,7 +26,6 @@ router.get("/", async (req, res, next) => {
 // @route   GET /dress/search
 // @access  Public
 router.get("/search", async (req, res, next) => {
-  console.log('ruta', req.query)
   const { size,court,neckline,long,location } = req.body;
   const new_body = {}
   for (const [key, value] of Object.entries(req.body)) {
@@ -65,14 +69,19 @@ router.get("/:dressId", async (req, res, next) => {
 // @desc    Upload image
 // @route   POST /upload
 // @access  Private
-router.post("/upload", isAuthenticated,fileUploader.single("imageUrl"), (req, res, next) => {
-    if (!req.file) {
-      next(new Error("No file uploaded!"));
-      return;
+
+router.post("/upload", isAuthenticated, (req, res) => {
+  
+  upload(req, res, function (err) {
+    if (err) {
+      return res.status(422).send({ errors: [{ title: "File Upload Error", detail: err.message }] });
     }
-    res.json({ fileUrl: req.file.path });
-  }
-);
+
+    console.log(req.files);
+
+    return res.json({ files: req.files });
+  });
+});
 
 // @desc    Create dress
 // @route   POST /dress

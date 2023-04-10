@@ -11,12 +11,17 @@ cloudinary.config({
 });
 
 const storage = new CloudinaryStorage({
-  cloudinary,
+  cloudinary: cloudinary,
   params: {
+    folder: "weddsell", // The name of the folder in cloudinary
     allowed_formats: ["jpg", "png"],
-    folder: "weddsell" // The name of the folder in cloudinary
-    // resource_type: "raw", // => this is in case you want to upload other types of files, not just images
-  }
+    // With this configuration, multer can upload multiple files in the same request
+    // Otherwise, it will upload only the first file in the array
+    format: async (req, file) => "png", // supports promises as well
+    public_id: (req, file) => "computed-filename-using-request-data",
+  },
 });
+const upload = multer({ storage: storage }).array("images", 10); // The maximum number of files you can upload is 10.
 
+module.exports = upload;
 module.exports = multer({ storage });
