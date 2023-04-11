@@ -33,9 +33,10 @@ router.get("/:userId", async (req, res, next) => {
   // @desc    Get user dresses
   // @route   GET /profile/user/dresses
   // @access  Private
-  router.get("/user/dresses", isAuthenticated, async (req, res) => {
+  router.get("/:userId/dresses", isAuthenticated, async (req, res) => {
+    const { userId } = req.params;
     try {
-      const user = await User.findById(req.payload.id);
+      const user = await User.findById(userId);
       if (!user) {
         return res.status(401).json({ error: "User not found" });
       }  
@@ -46,6 +47,7 @@ router.get("/:userId", async (req, res, next) => {
       return res.status(500).json({ error: "Internal server error" });
     }
   });
+  
 
 
 
