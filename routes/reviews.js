@@ -28,6 +28,24 @@ router.get("/review", isAuthenticated, async (req, res, next) => {
 });
 
 
+// @desc    Get all reviews for a specific dress
+// @route   GET /reviews/dress/:dressId
+// @access  Public
+router.get("/:dressId", async (req, res, next) => {
+  try {
+    const { dressId } = req.params;
+    console.log("dressId:", dressId); // Debug log
+    const reviews = await Review.find({ productId: dressId });
+    console.log("reviews:", reviews); // Debug log
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error:", error); // Debug log
+    next(error);
+  }
+});
+
+
+
 
 // @desc    Get one review
 // @route   GET /reviews/:reviewId
