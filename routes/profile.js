@@ -1,15 +1,28 @@
-const router = require('express').Router();
-const User = require('../models/User');
-const Dress = require('../models/Dress')
-const { isAuthenticated } = require('../middlewares/jwt');
+const router = require("express").Router();
+const User = require("../models/User");
+const Dress = require("../models/Dress");
+const { isAuthenticated } = require("../middlewares/jwt");
 
 // @desc    Profile user
 // @route   GET /profile
 // @access  Private
-router.get('/', isAuthenticated, async (req, res, next) => {
+router.get("/", isAuthenticated, async (req, res, next) => {
   try {
     const userDB = await User.find();
     res.status(200).json(userDB);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @desc    Get logged in user's dresses
+// @route   GET /dresses
+// @access  Private
+router.get("/dresses", isAuthenticated, async (req, res, next) => {
+  try {
+    const { _id: userId } = req.payload;
+    const dresses = await Dress.find({ seller: userId });
+    res.status(200).json(dresses);
   } catch (error) {
     next(error);
   }
@@ -19,57 +32,41 @@ router.get('/', isAuthenticated, async (req, res, next) => {
 // @route   GET /user/:userId
 // @access  Public
 router.get("/:userId", async (req, res, next) => {
-    const { userId } = req.params;
-    try {
-      const user = await User.findById(userId);
-      res.status(200).json(user);
-    } catch (error) {
-      next(error);
-    }
-  });
-  
-
-
-  // @desc    Get user dresses
-  // @route   GET /profile/user/dresses
-  // @access  Private
-  router.get("/:userId/dresses", isAuthenticated, async (req, res) => {
-    const { userId } = req.params;
-    try {
-      const user = await User.findById(userId);
-      if (!user) {
-        return res.status(401).json({ error: "User not found" });
-      }  
-      const dresses = await Dress.find({ seller: user._id });
-      return res.status(200).json(dresses);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
-  
-
-
+  const { userId } = req.params;
+  try {
+    const user = await User.findById(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // @desc    Edit profile
 // @route   PUT /profile
 // @access  Private
-router.put('/', isAuthenticated, async (req, res, next) => {
-    const { _id: userId } = req.payload;
-    const { username, email } = req.body;
-  
-    if (!username || !email) {
-      return res.status(400).json({ error: "Please fill all the fields in order to update your profile." });
-    }
-  
-    const allowedFields = { username, email }; 
-    try {
-      const updatedUser = await User.findByIdAndUpdate(userId, allowedFields, { new: true });
-      return res.status(200).json({ user: { username: updatedUser.username, email: updatedUser.email } });
-    } catch (error) {
-      return next(error);
-    }
-  });
-  
+router.put("/", isAuthenticated, async (req, res, next) => {
+  const { _id: userId } = req.payload;
+  const { username, email } = req.body;
+  if (!username || !email) {
+    return res
+      .status(400)
+      .json({
+        error: "Please fill all the fields in order to update your profile.",
+      });
+  }
+  const allowedFields = { username, email };
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, allowedFields, {
+      new: true,
+    });
+    return res
+      .status(200)
+      .json({
+        user: { username: updatedUser.username, email: updatedUser.email },
+      });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 module.exports = router;
