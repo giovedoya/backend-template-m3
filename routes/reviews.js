@@ -14,6 +14,21 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// @desc    Get logged in user's dresses
+// @route   GET /dresses
+// @access  Private
+router.get("/review", isAuthenticated, async (req, res, next) => {
+  try {
+    const { _id: userId } = req.payload;
+    const reviews = await Review.find({ buyerId: userId });
+    res.status(200).json(reviews);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
 // @desc    Get one review
 // @route   GET /reviews/:reviewId
 // @access  Public
