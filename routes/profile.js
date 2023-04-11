@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const Dress = require('../models/Dress')
 const { isAuthenticated } = require('../middlewares/jwt');
 
 // @desc    Profile user
@@ -27,6 +28,24 @@ router.get("/:userId", async (req, res, next) => {
     }
   });
   
+
+
+  // @desc    Get user dresses
+  // @route   GET /profile/user/dresses
+  // @access  Private
+  router.get("/user/dresses", isAuthenticated, async (req, res) => {
+    try {
+      const user = await User.findById(req.payload.id);
+      if (!user) {
+        return res.status(401).json({ error: "User not found" });
+      }  
+      const dresses = await Dress.find({ seller: user._id });
+      return res.status(200).json(dresses);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
 
 
 
