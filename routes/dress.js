@@ -28,7 +28,7 @@ router.get("/search", async (req, res, next) => {
       new_body[key]=value
     }
   }
-  console.log(req.body)
+
   try {  
     if (!req.body 
       // && !court && !neckline && !long && !location
@@ -36,14 +36,13 @@ router.get("/search", async (req, res, next) => {
       return res.status(400).json({ message: "Please provide at least one search parameter" });
     }
     const dress = await Dress.find(new_body)
-    console.log(dress)
+
     if (dress.length === 0) {
       return res.status(404).json({ message: "No dresses found" });
     }
     res.status(200).json(dress)
   } catch (error) {
     next(error);
-    console.error(error);
   }
 });
 
@@ -62,7 +61,7 @@ router.get("/:dressId", async (req, res, next) => {
 });
 
 // @desc    Upload image
-// @route   POST /upload
+// @route   POST /dress/upload
 // @access  Private
 router.post("/upload", isAuthenticated, fileUploader.single("imageUrl"), (req, res, next) => {
     if (!req.file) {
@@ -91,7 +90,6 @@ router.post("/", isAuthenticated, async (req, res, next) => {
     image,
   } = req.body;
   const dressIsValid = validateDress(req.body);
-  console.log(dressIsValid);
   if (dressIsValid.isValid === false) {
     res.status(400).json({ message: "Please check your fields" });
   } else {
@@ -193,7 +191,6 @@ router.put("/:dressId", isAuthenticated, async (req, res, next) => {
       }
       res.status(200).json(editedDress);
     } catch (error) {
-      console.error("Error in updating dress:", error);
       res.status(500).json({ message: "Internal server error" });
       next(error);
     }
