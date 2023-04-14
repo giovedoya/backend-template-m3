@@ -16,11 +16,27 @@ router.get("/", async (req, res, next) => {
     }
   });
 
+  // @desc    Get one review
+// @route   GET /reviews/:reviewId
+// @access  Public
+router.get("/:messageId", async (req, res, next) => {
+  const { messageId } = req.params;
+  try {
+    const message = await Message.findById(messageId).populate(
+      "sender",
+      "receiver"
+    );
+    res.status(200).json(message);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 // @desc    Create dress
 // @route   POST /dress
 // @access  Private
-router.post("/:dressId/message", isAuthenticated, async (req, res, next) => {
+router.post("/:dressId", isAuthenticated, async (req, res, next) => {
     const {
       subject,
       message,
