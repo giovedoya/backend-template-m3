@@ -5,28 +5,28 @@ const messageSchema = new Schema(
   {
     subject: {
       type: String,
-      required: true,
+    //   required: true,
       trim: true
     },
-    body: {
+    message: {
       type: String,
-      required: true,
+    //   required: true,
       trim: true
     },
     phone: {
         type: Number,
-        required: true,
+        // required: true,
         trim: true
     },
     sender: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+    //   required: true
     },
     receiver: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+    //   required: true
     }
   },
   { timestamps: true }

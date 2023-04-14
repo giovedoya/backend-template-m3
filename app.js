@@ -12,6 +12,7 @@ const dressRouter = require('./routes/dress');
 const reviewsRouter = require('./routes/reviews')
 const postRouter = require('./routes/post')
 const profileRouter = require('./routes/profile')
+const messageRouter = require('./routes/message')
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/dress', dressRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/post', postRouter)
 app.use('/profile', profileRouter)
+app.use('/message', messageRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
