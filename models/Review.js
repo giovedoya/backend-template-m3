@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const reviewSchema = new mongoose.Schema(
+const reviewSchema = new Schema(
   {
     buyerId: { 
       type: Schema.Types.ObjectId,
