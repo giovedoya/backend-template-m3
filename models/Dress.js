@@ -15,7 +15,7 @@ const dressSchema = new Schema(
          "heart", 
          "delusion", 
          "fallen Shoulders", 
-         "queen Anne", 
+         "queen anne", 
          "asymmetric", 
          "others", 
       ]
