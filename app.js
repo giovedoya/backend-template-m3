@@ -10,7 +10,7 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const dressRouter = require('./routes/dress');
 const reviewsRouter = require('./routes/reviews')
-const postRouter = require('./routes/post')
+const postRouter = require('./routes/Post')
 const profileRouter = require('./routes/profile')
 const messageRouter = require('./routes/message')
 
