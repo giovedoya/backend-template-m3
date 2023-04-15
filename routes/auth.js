@@ -53,7 +53,6 @@ router.post('/signup', async (req, res, next) => {
 // @route   POST /api/v1/auth/login
 // @access  Public
 router.post('/login', async (req, res, next) => { 
-  console.log(req.headers);
   const { email, password } = req.body;
   // Check if email or password are provided as empty string 
   if (email === "" || password === "") {
