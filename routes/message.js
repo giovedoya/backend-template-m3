@@ -7,9 +7,9 @@ const { isAuthenticated } = require("../middlewares/jwt");
 // @desc    Get all message
 // @route   GET /message
 // @access  Private
-router.get("/", async (req, res, next) => {
+router.get("/", isAuthenticated, async (req, res, next) => {  
     try {
-      const messages = await Message.find().populate("sender");
+      const messages = await Message.find({receiver: req.payload._id});
       res.status(200).json(messages);
     } catch (error) {
       next(error);
@@ -22,10 +22,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:messageId", async (req, res, next) => {
   const { messageId } = req.params;
   try {
-    const message = await Message.findById(messageId).populate(
-      "sender",
-      "receiver"
-    );
+    const message = await Message.findById(messageId).populate("sender");
     res.status(200).json(message);
   } catch (error) {
     next(error);
@@ -58,6 +55,20 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
     }
   });
   
-  
+  // @desc    Delete a message
+// @route   DELETE /message/:messageId
+// @access  Private
+router.delete("/:messageId", async (req, res, next) => {
+  const { messageId } = req.params;
+  try {
+    await BlogPost.findById(messageId);
+    await BlogPost.findByIdAndDelete(messageId);
+    res.status(204).json({ message: "the post has been removed successfully" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 
 module.exports = router;
