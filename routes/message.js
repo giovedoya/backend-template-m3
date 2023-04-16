@@ -61,13 +61,14 @@ router.post("/:dressId", isAuthenticated, async (req, res, next) => {
 router.delete("/:messageId", async (req, res, next) => {
   const { messageId } = req.params;
   try {
-    await BlogPost.findById(messageId);
-    await BlogPost.findByIdAndDelete(messageId);
-    res.status(204).json({ message: "the post has been removed successfully" });
+    await Message.findById(messageId);
+    await Message.findByIdAndDelete(messageId);
+    res.status(204).json({ message: "The message has been removed successfully" });
   } catch (error) {
     next(error);
   }
 });
+
 
 
 
