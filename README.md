@@ -1,7 +1,7 @@
-# Project's name REST API
+# WeddSell REST API
 ## Description
 
-This is a the backend repository for the React application `app's name`.
+This is a the backend repository for the React application `app's WeddSell`. 
 
 ---
 
@@ -36,55 +36,247 @@ npm run seed
 Users in the database have the following properties:
 
 ```js
-{
-  "username": String,
-  "email": String,
-  "hashedPassword": String,
-  "location": String
-}
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    hashedPassword: {
+      type: String,
+      required: true
+    },
+    username: {
+      type: String,
+      required: true
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user"
+    },
+    location: {
+      type: String,
+      required: true
+    },
+  },
+  {
+    timestamps: true
+  }
+);
+
 ```
 Product in the database have the following properties:
 
 ```js
-{
-"category": String,
-"designer": String,
-"seller": {
-"type": Schema.Types.ObjectId,
-"ref": "User",
-"required": true
-},
-"name": String,
-"description": String,
-"price": Number,
-"location": String,
-"image": String,
-"sold": {
-"type": Boolean,
-"default": false
-}
-}
+const dressSchema = new Schema(
+  {
+    neckline: {
+      type: String,
+      enum: [
+        "ship", 
+         "v-shaped", 
+         "square",
+         "strapless", 
+         "halter", 
+         "round", 
+         "heart", 
+         "delusion", 
+         "fallen shoulders", 
+         "queen anne", 
+         "asymmetric", 
+         "others", 
+      ]
+    },
+    court: {
+      type: String,
+      enum: [
+        "princess",
+        "straight",
+        "evaded",
+        "in A",
+        "siren",
+        "empire",
+        "others",
+      ]
+    },
+    long: {
+      type: String,
+      enum: ["long", "half", "short"]
+    },
+    color: {
+      type: String,
+      enum: [
+        "black",
+        "light blue",
+        "brown",
+        "golden",
+        "grey",
+        "green",
+        "ivory",
+        "multicolored",
+        "pink",
+        "red",
+        "silver",
+        "white",
+        "dark blue",
+        "others",
+      ]
+    },
+    size: {
+      type: Number,
+      enum: [
+        32,
+        34,
+        36,
+        38,
+        40,
+        42,
+        44,
+        46,
+        48,
+        50,
+        52,
+        54,
+        56,
+        58,
+        60,
+        62,
+      ]
+    },
+    
+    designer: {
+      type: String,
+      required: true
+    },
+    seller: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      min: 500,
+      required: true
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      // required: true,
+      default: 'https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg'
+    },
+    sold: {
+      type: Boolean,
+      default: false
+    },
+    type: {
+      type: String,
+      enum: ['yes', 'no'],
+      default: 'no'
+    }
+  },
+  {
+    timestamps: true
+  }
+);
 ```
 
 Review in the database have the following properties:
 
 ```js
-{
-  "buyerId": ObjectId,
-  "productId": ObjectId,
-  "rating": Number,
-  "comment": String,
-}
-
+const reviewSchema = new Schema(
+  {
+    buyerId: { 
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    dressId: {
+      type: Schema.Types.ObjectId,
+      ref: "Dress",
+      required: true
+    },
+    rating: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 5
+    },
+    comment: {
+      type: String,
+      required: true
+    },
+  },
+  {
+    timestamps: true
+  }
+);
 ```
 
+Post in the database have the following properties:
 
-
-```
-
-
+```js
+const blogPostSchema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  author: {
+    type: String,
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: String,
+    required: true,
+    default:
+      "https://www.genius100visions.com/wp-content/uploads/2017/09/placeholder-vertical.jpg"
+  },
+});
 ---
+Message in the database have the following properties:
 
+---js
+const messageSchema = new Schema(
+  {
+    subject: {
+      type: String,
+      trim: true
+    },
+    message: {
+      type: String,
+      trim: true
+    },
+    phone: {
+        type: Number,
+        trim: true
+    },
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    receiver: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    }
+  },
+  { timestamps: true }
+);
+---
 ## API endpoints and usage 
 
 | Action           | Method    | Endpoint             | Req.body                        | Private/Public |
@@ -106,7 +298,7 @@ Review in the database have the following properties:
 ## Useful links
 
 - [Presentation slides]()
-- [Frontend repository]()
-- [Frontend deploy]()
-- [Deployed REST API]()
+- [Frontend repository](https://github.com/giovedoya/frontend-template-m3)
+- [Frontend deploy](https://weddsell.netlify.app/)
+- [Deployed REST API](https://weddsell.fly.dev/)
 
