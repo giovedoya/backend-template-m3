@@ -279,20 +279,19 @@ const messageSchema = new Schema(
 ---
 ## API endpoints and usage 
 
-| Action           | Method    | Endpoint             | Req.body                        | Private/Public |
-|------------------|-----------|----------------------|---------------------------------|-----------------|
-| SIGN UP user     | POST      | /api/v1/auth/signup  | { username, email, password, location }   |    Public |                 
-| LOG IN user      | POST      | /api/v1/auth/login   | { email, password }             |    Public |                  
-| GET logged in user  | GET   | /api/v1/auth/me      |                                 | Private |
-| GET all products   | GET     | /api/v1/products   |   | Public |
-| GET a single product   | GET     | /api/v1/products/:productId   |   | Public |
-| CREATE a new product  | POST     | /api/v1/products   |  { category, designer, seller, name, description, price, location, image } | Private |
-| DELETE a product  | DELETE     | /api/v1/products/:productId   |  { category, designer, seller, name, description, price, location, image } | Private |
-| EDIT a product  | PUT     | /api/v1/products/:productId  |  { category, designer, seller, name, description, price, location, image } | Private |
-| GET all reviews for a product  | GET     | /api/v1/products/:productId/reviews  |  | Public |
-| POST a new review for a product  | POST     | /api/v1/products/:productId/reviews  |  { rating, comment, buyerId } | Private |
-| DELETE a review for a product  | DELETE     | /api/v1/products/:productId/reviews/:reviewId  |   | Private |
-| EDIT a review for a product | PUT     | /api/v1/products/:productId/reviews/:reviewId  |  { rating, comment } | Private |
+| Action                               | Method | Endpoint         | Req.body                                                                       | Private/Public |
+|--------------------------------------|--------|------------------|--------------------------------------------------------------------------------|----------------|
+| SIGN UP user                         | POST   | /auth/signup     | { username, email, password, location }                                        | Public         | 
+| LOG IN user                          | POST   | /auth/login      | { email, password }                                                            | Public         | 
+| GET logged in user                   | GET    | /auth/me         |                                                                                | Private        |
+| GET all dresses                      | GET    | /dress           |                                                                                | Public         |
+| GET a single dress                   | GET    | /dress/:dressId  |                                                                                | Public         |
+| POST create a new dress              | POST   | dress            |  { category, designer, seller, name, description, price, location, image }     | Private        |
+| DELETE a dress                       | DELETE | /dress/:dressId  |  { category, designer, seller, name, description, price, location, image }     | Private        |
+| EDIT a dress                         | PUT    | /dress/:dressId  |  { category, designer, seller, name, description, price, location, image }     | Private        |
+| POST create a new review for a dress | POST   | /dress/:dressId/ |  { rating, comment, buyerId }                                                  | Private        |
+| GET all post                         | GET    | /post            |                                                                                | Public         |
+ 
 ---
 
 ## Useful links
