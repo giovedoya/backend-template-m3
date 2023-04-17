@@ -276,7 +276,7 @@ const messageSchema = new Schema(
   },
   { timestamps: true }
 );
----
+
 ## API endpoints and usage 
 
 | Action                               | Method | Endpoint         | Req.body                                                                       | Private/Public |
@@ -292,7 +292,7 @@ const messageSchema = new Schema(
 | POST create a new review for a dress | POST   | /dress/:dressId/ |  { rating, comment, buyerId }                                                  | Private        |
 | GET all post                         | GET    | /post            |                                                                                | Public         |
  
----
+
 
 ## Useful links
 
