@@ -279,20 +279,25 @@ const messageSchema = new Schema(
 
 ## API endpoints and usage 
 
-| Action                               | Method | Endpoint         | Req.body                                                                       | Private/Public |
-|--------------------------------------|--------|------------------|--------------------------------------------------------------------------------|----------------|
-| SIGN UP user                         | POST   | /auth/signup     | { username, email, password, location }                                        | Public         | 
-| LOG IN user                          | POST   | /auth/login      | { email, password }                                                            | Public         | 
-| GET logged in user                   | GET    | /auth/me         |                                                                                | Private        |
-| GET all dresses                      | GET    | /dress           |                                                                                | Public         |
-| GET a single dress                   | GET    | /dress/:dressId  |                                                                                | Public         |
-| POST create a new dress              | POST   | dress            |  { category, designer, seller, name, description, price, location, image }     | Private        |
-| DELETE a dress                       | DELETE | /dress/:dressId  |  { category, designer, seller, name, description, price, location, image }     | Private        |
-| EDIT a dress                         | PUT    | /dress/:dressId  |  { category, designer, seller, name, description, price, location, image }     | Private        |
-| POST create a new review for a dress | POST   | /dress/:dressId/ |  { rating, comment, buyerId }                                                  | Private        |
-| GET all post                         | GET    | /post            |                                                                                | Public         |
- 
-
+| Action                               | Method | Endpoint          | Req.body                                                                 | Private/Public |
+|--------------------------------------|--------|-------------------|--------------------------------------------------------------------------|----------------|
+| SIGN UP user                         | POST   | /auth/signup      | { username, email, password, location }                                  | Public         | 
+| LOG IN user                          | POST   | /auth/login       | { email, password }                                                      | Public         | 
+| GET logged in user                   | GET    | /auth/me          |                                                                          | Private        |
+| GET all dresses                      | GET    | /dress            |                                                                          | Public         |
+| GET a single dress                   | GET    | /dress/:dressId   |                                                                          | Public         |
+| POST create a new dress              | POST   | /ress             | { category, designer, seller, name, description, price, location, image }| Private        |
+| DELETE a dress                       | DELETE | /dress/:dressId   | { category, designer, seller, name, description, price, location, image }| Private        |
+| EDIT a dress                         | PUT    | /dress/:dressId   | { category, designer, seller, name, description, price, location, image }| Private        |
+| POST create a new review for a dress | POST   | /dress/:dressId  | { rating, comment, buyerId }                                              | Private        |
+| GET all post                         | GET    | /post             |                                                                          | Public         |
+| GET a single                         | GET    | /:postId          | { postId }                                                               | Public         | 
+| POST upload image                    | POST   | /post/upload      |                                                                          | Public         | 
+| POST create post                     | POST   | /post             | { title, content, author, image }                                        | Public         | 
+| PUT edit post                        | PUT    | /:postId          | { title, content, author, image }                                        | Public         | 
+| DELETE delete post                   | DELETE | /:postId          | { postId }                                                               | Public         |
+| POST create a message                | POST   | /message/:dressId | { subject, message, phone }                                              | Public         | 
+| DELETE delete a message              | POST   | /:messageId        | { subject, message, phone }                                             | Public         | 
 
 ## Useful links
 
