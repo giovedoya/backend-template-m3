@@ -258,6 +258,6 @@ const messageSchema = new Schema(
 ## Useful links
 
 - [Presentation slides]()
-- [Frontend repository](github.com/giovedoya/frontend-template-m3)
-- [Frontend deploy](weddsell.netlify.app)
-- [Deployed REST API](weddsell.fly.dev)
+- [Frontend repository](https://github.com/giovedoya/frontend-template-m3)
+- [Frontend deploy](https://weddsell.netlify.app/)
+- [Deployed REST API](https://weddsell.fly.dev/)
